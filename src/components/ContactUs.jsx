@@ -7,7 +7,7 @@ export default () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
             ,
-            contact: "josebarbosa@teldip.com"
+            contact: "soporte@teldip.com"
         },
         {
             icon:
@@ -24,7 +24,7 @@ export default () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
             ,
-            contact: "(Agregar la dirección)"
+            contact: "Bogotá, Colombia"
         },
     ]
 
@@ -32,8 +32,8 @@ export default () => {
         <main className="py-14">
             <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-lg mx-auto gap-12 justify-between lg:flex lg:max-w-none">
-                    {/* <div className="max-w-lg space-y-3">
-                        <h2 className="text-indigo-600 font-semibold text-xl">
+                    <div className="max-w-lg space-y-3">
+                        <h2 className="text-gray-800 font-semibold text-xl">
                             Contactenos
                         </h2>
                         <p className="text-gray-800 text-5xl font-semibold sm:text-4xl">
@@ -56,7 +56,7 @@ export default () => {
                                 }
                             </ul>
                         </div>
-                    </div> */}
+                    </div>
                     <div className="flex-1 m-auto mt-12 sm:max-w-lg lg:max-w-md">
                         <form
                             onSubmit={(e) => e.preventDefault()}
@@ -82,7 +82,7 @@ export default () => {
                                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                                 />
                             </div>
-                            <div>
+                            {/* <div>
                                 <label className="font-medium">
                                     Compañia
                                 </label>
@@ -91,7 +91,7 @@ export default () => {
                                     required
                                     className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                                 />
-                            </div>
+                            </div> */}
                             <div>
                                 <label className="font-medium">
                                     Mensaje
