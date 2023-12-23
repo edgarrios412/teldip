@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import teldip from "../assets/teldip.jpeg"
 
 export default () => {
 
@@ -23,18 +24,18 @@ export default () => {
     }, [])
 
     return (
-        <nav className={`bg-white pb-5 md:text-sm md:mt-4 ${state ? "shadow-lg rounded-xl border mx-2 mt-2 md:shadow-none md:border-none md:mx-2 md:mt-10" : ""}`}>
+        <nav style={{background:"linear-gradient(to left, darkslategray, turquoise, green, turquoise, darkslategray)"}} className={`bg-white md:text-sm ${state ? "shadow-lg rounded-xl border mx-2 mt-2 md:shadow-none md:border-none md:mx-2 md:mt-10" : ""}`}>
             <div className="gap-x-14 items-center max-w-screen-xl mx-auto px-4 md:flex md:px-8">
                 <div className="flex items-center justify-between py-5 md:block">
-                    {/* <a href="javascript:void(0)">
+                    <a href="javascript:void(0)">
                         <img
-                            src="https://www.floatui.com/logo.svg"
-                            width={120}
-                            height={50}
+                            src={teldip}
+                            width={70}
+                            height={70}
                             alt="Float UI logo"
                         />
-                    </a> */}
-                    <h2 className={`text-indigo-600 font-semibold`}>LOGO TELDIP</h2>
+                    </a>
+                    {/* <h2 className={`text-indigo-600 font-semibold`}>LOGO TELDIP</h2> */}
                     <div className="md:hidden">
                         <button className="menu-btn text-gray-500 hover:text-gray-800"
                             onClick={() => setState(!state)}
@@ -58,8 +59,8 @@ export default () => {
                         {
                             navigation.map((item, idx) => {
                                 return (
-                                    <li key={idx} className="text-gray-700 hover:text-gray-900">
-                                        <a href={item.path} className="block">
+                                    <li key={idx} className="text-white transition hover:text-gray-100">
+                                        <a href={item.path} className="block text-[16px]">
                                             {item.title}
                                         </a>
                                     </li>
@@ -68,10 +69,10 @@ export default () => {
                         }
                     </ul>
                     <div className="flex-1 gap-x-6 items-center justify-end space-y-6 md:flex md:space-y-0 md:mt-0">
-                        <a href="javascript:void(0)" className="block text-gray-700 hover:text-gray-900">
+                        <a href="javascript:void(0)" className="block text-gray-700 text-[16px] hover:text-gray-900">
                             Ingresar
                         </a>
-                        <a href="javascript:void(0)" className="flex items-center justify-center gap-x-1 py-2 px-4 text-white font-medium bg-gray-800 hover:bg-gray-700 active:bg-gray-900 rounded-full md:inline-flex">
+                        <a href="javascript:void(0)" className="flex items-center text-[16px] justify-center gap-x-1 py-2 px-4 text-white font-medium bg-gray-800 hover:bg-gray-700 active:bg-gray-900 rounded-full md:inline-flex">
                             Registro
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                                 <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />

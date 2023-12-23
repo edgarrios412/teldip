@@ -32,14 +32,14 @@ export default () => {
         <main className="py-14">
             <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-lg mx-auto gap-12 justify-between lg:flex lg:max-w-none">
-                    <div className="max-w-lg space-y-3">
-                        <h3 className="text-indigo-600 font-semibold">
+                    {/* <div className="max-w-lg space-y-3">
+                        <h2 className="text-indigo-600 font-semibold text-xl">
                             Contactenos
-                        </h3>
-                        <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+                        </h2>
+                        <p className="text-gray-800 text-5xl font-semibold sm:text-4xl">
                         Háganos saber cómo podemos ayudar
                         </p>
-                        <p>
+                        <p className="text-xl">
                         Estamos aquí para ayudarle y responder cualquier pregunta que pueda tener. ¡Esperamos tener noticias suyas! Complete el formulario o envíenos la información de contacto a continuación.
                         </p>
                         <div>
@@ -50,14 +50,14 @@ export default () => {
                                             <div className="flex-none text-gray-400">
                                                 {item.icon}
                                             </div>
-                                            <p>{item.contact}</p>
+                                            <p className="">{item.contact}</p>
                                         </li>
                                     ))
                                 }
                             </ul>
                         </div>
-                    </div>
-                    <div className="flex-1 mt-12 sm:max-w-lg lg:max-w-md">
+                    </div> */}
+                    <div className="flex-1 m-auto mt-12 sm:max-w-lg lg:max-w-md">
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="space-y-5"
@@ -99,7 +99,7 @@ export default () => {
                                 <textarea required className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"></textarea>
                             </div>
                             <button
-                                className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+                                className="w-full px-4 py-2 text-white font-medium bg-[#0d6efd] hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
                             >
                                 Enviar
                             </button>
