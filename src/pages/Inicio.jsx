@@ -1,13 +1,14 @@
 import ContactUs from "../components/ContactUs"
-import Footer from "../components/Footer"
-import NavBar from "../components/NavBar"
+import Footer from "../components/layout/Footer"
+import NavBar from "../components/layout/NavBar"
 
 const Inicio = () => {
 
     return (
         <>
-            <NavBar />
-            <ContactUs />
+            <div style={{ height: "100vh" }}>
+                <h1>INICIO</h1>
+            </div>
             <Footer />
         </>
     )

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import NavBar from "../components/NavBar"
+import NavBar from "../components/layout/NavBar"
 import { useEffect, useState } from "react"
 
 const Datos = () => {
