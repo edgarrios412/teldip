@@ -1,127 +1,267 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, useDisclosure, Avatar, Tabs, Tab } from "@nextui-org/react";
+import { cn } from "@/lib/utils"
+import { Link } from "react-router-dom";
+import style from "./NavBar.module.css"
+// import { Icons } from "@/components/icons"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+
+import { Button } from "@/components/ui/button"
 import ModalLogin from "./ModalLogin";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { Link as LinkRoute, useNavigate } from "react-router-dom"
-import teldip from "../../assets/teldip.jpeg"
-import { NavigationContext } from "../../utils/context/Navigation/NavigationContext";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import {
+  Cloud,
+  CreditCard,
+  Github,
+  Keyboard,
+  LifeBuoy,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Plus,
+  PlusCircle,
+  Settings,
+  User,
+  UserPlus,
+  Users,
+} from "lucide-react"
+
+
+const components = [
+  {
+    title: "Firma digital",
+    href: "/docs/primitives/alert-dialog",
+    description:
+      "A modal dialog that interrupts the user with important content and expects a response.",
+  },
+  {
+    title: "Tarjeta digital",
+    href: "/docs/primitives/hover-card",
+    description:
+      "For sighted users to preview content available behind a link.",
+  },
+  {
+    title: "Certificado medico",
+    href: "/docs/primitives/progress",
+    description:
+      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+  },
+  {
+    title: "Biometricos",
+    href: "/docs/primitives/scroll-area",
+    description: "Visually or semantically separates content.",
+  },
+]
 
 export default () => {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-    const { edad, setEdad } = useContext(NavigationContext)
 
-    const [page, setPage] = useState(1)
+  const [open, setOpen] = useState(false)
+  const [isLogged, setIsLogged] = useState(false)
 
-    const menuItems = [
-        "Profile",
-        "Dashboard",
-        "Activity",
-        "Analytics",
-        "System",
-        "Deployments",
-        "My Settings",
-        "Team Settings",
-        "Help & Feedback",
-        "Log Out",
-    ];
+  useEffect(() => {
+    console.log(isLogged)
+  }, [isLogged])
+  return (
+    <div className={style.navbar}>
+      <NavigationMenu className="w-screen max-w-full py-6 flex justify-around">
+        <h4 className="font-bold text-white text-2xl ">Teldip</h4>
+        <NavigationMenuList className="flex justify-around">
+          <NavigationMenuItem>
+            <Link to="/">
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Inicio
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Servicios</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.1fr_1fr]">
+                <li className="row-span-3">
+                  <img className="flex w-44 h-56" src={"https://i.pinimg.com/originals/9b/20/d6/9b20d6f8b2361ef151b2e2dc4b85076a.jpg"}></img>
+                  {/* <NavigationMenuLink asChild>
+                    <a
+                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                      href="/"
+                    >
+                      <div className="mb-2 mt-4 text-lg font-medium">
+                        shadcn/ui
+                      </div>
+                      <p className="text-sm leading-tight text-muted-foreground">
+                        Beautifully designed components that you can copy and
+                        paste into your apps. Accessible. Customizable. Open
+                        Source.
+                      </p>
+                    </a>
+                  </NavigationMenuLink> */}
+                </li>
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Firma digital">
+                  API para firmar documentos de forma digital en pocos pasos
+                </ListItem>
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Tarjeta digital">
+                  Servicio de identificación de vigilados a través de nuestra app
+                </ListItem>
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Certificado medico">
+                  Genera certificados medicos válidos para tu empresa
+                </ListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          {/* <NavigationMenuItem>
+          <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              {components.map((component) => (
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
+                  {component.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem> */}
+          <NavigationMenuItem>
+            <Link to="/contacto">
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Contacto
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+        {!isLogged ?
+          <ModalLogin open={open} setIsLogged={setIsLogged} setOpen={setOpen} /> :
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar role="button">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Perfil</span>
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  <span>Pagos</span>
+                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Ajustes</span>
+                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Users className="mr-2 h-4 w-4" />
+                  <span>Equipo</span>
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    <span>Invitar usuarios</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem>
+                        <Mail className="mr-2 h-4 w-4" />
+                        <span>Correo</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        <span>Mensaje</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        <span>Más...</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuItem>
+                  <Plus className="mr-2 h-4 w-4" />
+                  <span>Nuevo equipo</span>
+                  <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <LifeBuoy className="mr-2 h-4 w-4" />
+                <span>Soporte</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Cloud className="mr-2 h-4 w-4" />
+                <span>API</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => { setIsLogged(false); setOpen(false) }}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Cerrar sesion</span>
+                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-    const navigate = useNavigate()
-
-    return (
-        <Navbar className="mt-2" onMenuOpenChange={setIsMenuOpen}>
-            <ModalLogin isOpen={isOpen} onOpenChange={onOpenChange} />
-            <NavbarContent justify="start">
-                <NavbarMenuToggle
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                    className="sm:invisible"
-                />
-                <NavbarBrand>
-                    {/* <AcmeLogo /> */}
-                    <p className="font-bold text-inherit">TELDIP</p>
-                </NavbarBrand>
-            </NavbarContent>
-
-            <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <Tabs color="secondary" variant={"light"} aria-label="Tabs variants" onSelectionChange={(e) => navigate("/"+e)}>
-                    {/* <LinkRoute onClick={() => setPage(1)} to="/"> */}
-                        <Tab key="" onSelectionChange={() => alert("/")} title="Inicio" />
-                    {/* </LinkRoute> */}
-                    {/* <LinkRoute to="/servicios" onClick={() => setPage(2)}> */}
-                    <Tab key="servicios" onSelectionChange={() => navigate("/servicios")} title="Servicios" />
-                    {/* </LinkRoute> */}
-                    <Tab key="contacto" onSelectionChange={() => navigate("/contacto")} title="Contacto" />
-                </Tabs>
-                {/* <NavbarItem isActive={page == 1}>
-                    <LinkRoute onClick={() => setPage(1)} to="/">
-                        Inicio
-                    </LinkRoute>
-                </NavbarItem>
-                <NavbarItem isActive={page == 2}>
-                    <LinkRoute to="/servicios" onClick={() => setPage(2)}>
-                        Servicios
-                    </LinkRoute>
-                </NavbarItem>
-                <NavbarItem isActive={page == 3}>
-                    <LinkRoute color="foreground" onClick={() => setPage(3)} to="/contacto">
-                        Contacto
-                    </LinkRoute>
-                </NavbarItem> */}
-            </NavbarContent>
-            <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Login</Link>
-                </NavbarItem>
-                <NavbarItem>
-                    {false ? <Button onPress={onOpen} as={Link} color="primary" href="#" variant="flat">
-                        Ingresar
-                    </Button> :
-                        <Dropdown placement="bottom-end">
-                            <DropdownTrigger>
-                                <Avatar
-                                    isBordered
-                                    className="transition-transform"
-                                    name="Jose"
-                                // src="https://aui.atlassian.com/aui/8.6/docs/images/avatar-project.svg"
-                                />
-                            </DropdownTrigger>
-                            <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                <DropdownItem key="profile" className="h-14 gap-2">
-                                    <p className="font-semibold">Iniciado como</p>
-                                    <p className="font-semibold">jose@teldip.com</p>
-                                </DropdownItem>
-                                <DropdownItem key="settings" href="/panel">
-                                    Panel
-                                </DropdownItem>
-                                <DropdownItem key="configurations">Configuracion</DropdownItem>
-                                <DropdownItem key="help_and_feedback">
-                                    Soporte
-                                </DropdownItem>
-                                <DropdownItem key="logout" color="danger">
-                                    Cerrar sesion
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    }
-                </NavbarItem>
-            </NavbarContent>
-            <NavbarMenu>
-                {menuItems.map((item, index) => (
-                    <NavbarMenuItem key={`${item}-${index}`}>
-                        <Link
-                            color={
-                                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-                            }
-                            className="w-full"
-                            href="#"
-                            size="lg"
-                        >
-                            {item}
-                        </Link>
-                    </NavbarMenuItem>
-                ))}
-            </NavbarMenu>
-        </Navbar>
-    );
+        }
+      </NavigationMenu>
+    </div>
+  );
 }
+
+const ListItem = React.forwardRef(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"

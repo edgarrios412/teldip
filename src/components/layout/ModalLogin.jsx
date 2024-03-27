@@ -1,66 +1,85 @@
 import React from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link} from "@nextui-org/react";
-import {MailIcon} from '../icons/MailIcon.jsx';
-import {LockIcon} from '../icons/LockIcon.jsx';
+import { cn } from "@/lib/utils"
+// import { useMediaQuery } from "@/hooks/use-media-query"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+export default ({open, setOpen, setIsLogged}) => {
 
-export default ({isOpen, onOpenChange}) => {
+  // const isDesktop = useMediaQuery("(min-width: 768px)")
 
+  if (true) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline" className={"font-xl"}>Ingresar</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Ingresar</DialogTitle>
+            <DialogDescription className={"font-[OpenSans] text-sm"}>
+              Ingresa a tu cuenta para tener acceso a todas las funcionalidades disponibles en la web
+            </DialogDescription>
+          </DialogHeader>
+          <ProfileForm setIsLogged={setIsLogged} />
+        </DialogContent>
+      </Dialog>
+    )
+  }
+ 
   return (
-    <>
-      <Modal 
-        className="mt-0"
-        isOpen={isOpen} 
-        onOpenChange={onOpenChange}
-        placement="center"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Ingresar</ModalHeader>
-              <ModalBody>
-                <Input
-                  autoFocus
-                  endContent={
-                    <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  }
-                  label="Correo"
-                  placeholder="Ingresa tu correo"
-                  variant="bordered"
-                />
-                <Input
-                  endContent={
-                    <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                  }
-                  label="Contraseña"
-                  placeholder="Ingresa tu contraseña"
-                  type="password"
-                  variant="bordered"
-                />
-                <div className="flex py-2 px-1 justify-between">
-                  <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Recuerdame
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Olvide mi contraseña
-                  </Link>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Cerrar
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Ingresar
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>
+        <Button variant="outline">Edit Profile</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerDescription>
+            Make changes to your profile here. Click save when you're done.
+          </DrawerDescription>
+        </DrawerHeader>
+        <ProfileForm className="px-4" />
+        <DrawerFooter className="pt-2">
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
+function ProfileForm({ className, setIsLogged }) {
+  return (
+    <form className={cn("grid items-start gap-4", className)}>
+      <div className="grid gap-2">
+        <Label htmlFor="email">Correo electronico</Label>
+        <Input type="email" id="email" />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="username">Contraseña</Label>
+        <Input type="password" id="password" />
+      </div>
+      <Button type="button" onClick={() => setIsLogged(true)}>Ingresar</Button>
+    </form>
+  )
 }
