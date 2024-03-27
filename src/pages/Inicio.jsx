@@ -10,8 +10,8 @@ import code from "../assets/code.svg"
 import apis from "../assets/apis.svg"
 import security from "../assets/security.svg"
 import integration from "../assets/integration.svg"
-import { useEffect, useRef } from "react"
-import { useInView, motion, useAnimation } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
 const Inicio = () => {
 
     const barRef = useRef(null)
@@ -25,7 +25,7 @@ const Inicio = () => {
     useEffect(() => {
         if (serviceInView) {
             controls.start("visible")
-        }else {
+        } else {
             controls.start("hidden")
         }
     }, [serviceInView])
@@ -37,29 +37,71 @@ const Inicio = () => {
             controlsBar.start("hidden")
         }
     }, [barInView])
+    const [index, setIndex] = useState(0)
+
+    const cambiarTexto = () => {
+        setTimeout(() => {
+            setIndex((prev) => {
+                if (prev >= textos.length - 1) {
+                    return 0
+                } else {
+                    return prev + 1
+                }
+            });
+        }, 8000)
+    }
+
+    useEffect(() => {
+        cambiarTexto()
+    }, [index])
+
+    const floatAnimation = {
+        y: ["4%", "-4%", "4%"],
+        transition: {
+          duration: 7,
+          repeat: Infinity,
+          ease: "easeInOut",
+        },
+     };
+
+    const textos = ["Somos profesionales en el desarrollo de software empresarial", "Comprometidos con la innovación, somos líderes en software empresarial", "Desarrollamos software empresarial, enfocados en el crecimiento de tu negocio"]
+    const subtitulos = ["Nos distinguimos por nuestra experiencia y habilidades en el diseño y creación de soluciones de software personalizadas, enfocadas en el crecimiento y la eficiencia de las empresas.",
+    "Nos enorgullece ser líderes en el campo de la innovación tecnológica, ofreciendo soluciones de software empresarial que impulsan la transformación digital y el éxito empresarial.",
+    "Nuestro enfoque está en el desarrollo de software empresarial que no solo mejora la eficiencia operativa, sino que también impulsa el crecimiento y la expansión de tu negocio en el mercado."]
 
     return (
         <>
             <div style={{ height: "fit-content" }}>
-                <div className="flex flex-col p-10 items-center lg:flex-row lg:justify-center text-center m-auto lg:flex gap-24 my-32">
+                <div className="flex flex-col p-10 items-center lg:flex-row lg:justify-center text-center m-auto lg:flex gap-32 my-32">
                     <motion.div
-                        className="max-w-[650px]"
+                        className="max-w-[700px]"
                         initial={{ opacity: 0, x: 75 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.35, delay: 0 }}
                     >
-                        <p
-                            className="font-bold text-[56px] text-slate-800 leading-[55px]">Somos profesionales en el desarrollo de software empresarial<br></br>
-                            {/* <br></br> */}
-                        </p>
-                        <p className="font-medium text-xl font-[OpenSans] text-slate-500 mt-5">Desarrollamos y diseñamos programas especiales de alta calidad de acuerdo a la necesidad de tu empresa.</p>
+                            <motion.p
+                                key={index}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 1 }}
+                                className="font-bold text-[56px] text-slate-800 leading-[55px]">{textos[index]}<br></br>
+                                {/* <br></br> */}
+                            </motion.p>
+                        <motion.p 
+                        key={index+10}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1 }}
+                        className="font-medium text-xl font-[OpenSans] text-slate-500 mt-5">{subtitulos[index]}</motion.p>
                         <button
                             className="font-medium text-lg mt-10 text-white p-3 rounded-lg bg-[#00bfa6]">Ponte en contacto con nosotros</button>
                     </motion.div>
                     <motion.img
-                        initial={{ opacity: 0, x: -75 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.35, delay: 0 }}
+                        initial={{ opacity: 1}}
+                        animate={floatAnimation}
+                        transition={{ duration: 2, delay: 2 }}
                         src={code} className="h-96" />
                 </div>
                 <div className="flex mt-56 flex-col items-center lg:flex-row justify-center gap-16 z-30">
@@ -114,18 +156,18 @@ const Inicio = () => {
                 </motion.div> */}
                 <h1 className="font-bold text-4xl text-slate-800 text-center mt-20">Nuestros servicios</h1>
                 <div
-                className="py-36 px-36 xl:px-96 max-sm:px-10 max-sm:py-24 w-full h-[fit]">
-                    <motion.div 
-                    variants={{
-                        hidden: { opacity: 0, y: 75 },
-                        visible: { opacity: 1, y: 0 }
-                    }}
-                    initial="hidden"
-                    animate={controls}
-                    transition={{ duration: 0.25, delay: 0 }}
-    
-                    ref={ref}
-                    className="flex flex-wrap m-auto justify-around -mx-2 lg:gap-0 gap-24">
+                    className="py-36 px-36 max-sm:px-10 max-sm:py-24 w-full h-[fit]">
+                    <motion.div
+                        variants={{
+                            hidden: { opacity: 0, y: 75 },
+                            visible: { opacity: 1, y: 0 }
+                        }}
+                        initial="hidden"
+                        animate={controls}
+                        transition={{ duration: 0.25, delay: 0 }}
+
+                        ref={ref}
+                        className="flex flex-wrap m-auto justify-around -mx-2 lg:gap-0 gap-24">
                         <motion.div
                             variants={{
                                 hidden: { opacity: 0, y: 75 },
@@ -139,7 +181,7 @@ const Inicio = () => {
                             <img src={certificado} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Certificados digitales</h3>
-                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96">Asegura la integridad, validación y seguridad de tus documentos médicos con tecnología de vanguardia, garantizando la autenticidad y confiabilidad en el ámbito médico.</h5>
+                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Asegura la integridad, validación y seguridad de tus documentos médicos con tecnología de vanguardia, garantizando la autenticidad y confiabilidad en el ámbito médico.</h5>
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
                             </div>
                         </motion.div>
@@ -156,7 +198,7 @@ const Inicio = () => {
                             <img src={tarjeta} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Tarjeta digital</h3>
-                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96">Documento virtual seguro y fácil de usar para autenticación y verificación, proporcionando una solución eficiente y confiable para la identificación en el mundo digital.</h5>
+                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Documento virtual seguro y fácil de usar para autenticación y verificación, proporcionando una solución eficiente y confiable para la identificación en el mundo digital.</h5>
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
                             </div>
                         </motion.div>
@@ -173,7 +215,7 @@ const Inicio = () => {
                             <img src={biometricos} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Biometricos</h3>
-                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96">Tecnología de seguridad avanzada para identificar y autenticar de manera única, ofreciendo un nivel de seguridad sin precedentes y personalización en la autenticación.</h5>
+                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Tecnología de seguridad avanzada para identificar y autenticar de manera única, ofreciendo un nivel de seguridad sin precedentes y personalización en la autenticación.</h5>
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
                             </div>
                         </motion.div>
@@ -190,7 +232,7 @@ const Inicio = () => {
                             <img src={firma} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Firma digital</h3>
-                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96">Validación electrónica de documentos con seguridad y autenticidad, asegurando la integridad y confiabilidad de las firmas en el ámbito digital.</h5>
+                                <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Validación electrónica de documentos con seguridad y autenticidad, asegurando la integridad y confiabilidad de las firmas en el ámbito digital.</h5>
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
                             </div>
                         </motion.div>

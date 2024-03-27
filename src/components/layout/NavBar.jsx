@@ -87,7 +87,7 @@ export default () => {
   }, [isLogged])
   return (
     <div className={style.navbar}>
-      <NavigationMenu className="w-screen max-w-full py-6 flex justify-around">
+      <NavigationMenu className="w-screen font-[OpenSans] max-w-full py-6 flex justify-around">
         <h4 className="font-bold text-white text-2xl ">Teldip</h4>
         <NavigationMenuList className="flex justify-around">
           <NavigationMenuItem>
@@ -164,7 +164,7 @@ export default () => {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-56 font-[OpenSans]">
               <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
@@ -184,8 +184,8 @@ export default () => {
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
+              {/* <DropdownMenuSeparator /> */}
+              {/* <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Users className="mr-2 h-4 w-4" />
                   <span>Equipo</span>
@@ -218,8 +218,8 @@ export default () => {
                   <span>Nuevo equipo</span>
                   <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
+              </DropdownMenuGroup> */}
+              {/* <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LifeBuoy className="mr-2 h-4 w-4" />
                 <span>Soporte</span>
@@ -227,7 +227,7 @@ export default () => {
               <DropdownMenuItem disabled>
                 <Cloud className="mr-2 h-4 w-4" />
                 <span>API</span>
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => { setIsLogged(false); setOpen(false) }}>
                 <LogOut className="mr-2 h-4 w-4" />
