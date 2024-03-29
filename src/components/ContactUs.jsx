@@ -1,5 +1,6 @@
 import Footer from "./layout/Footer"
 import NavBar from "./layout/NavBar"
+import {motion} from "framer-motion"
 
 export default () => {
 
@@ -36,7 +37,11 @@ export default () => {
         <main className="py-14 mt-28">
             <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-lg mx-auto gap-12 justify-between lg:flex lg:max-w-none">
-                    <div className="max-w-lg space-y-3">
+                    <motion.div 
+                    initial={{ opacity: 0, x: 75 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, delay: 0 }}
+                    className="max-w-lg space-y-3">
                         <h2 className="text-gray-800 font-semibold text-xl">
                             Contactenos
                         </h2>
@@ -60,8 +65,12 @@ export default () => {
                                 }
                             </ul>
                         </div>
-                    </div>
-                    <div className="flex-1 m-auto mt-12 sm:max-w-lg lg:max-w-md">
+                    </motion.div>
+                    <motion.div 
+                    initial={{ opacity: 0, x: -75 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, delay: 0 }}
+                    className="flex-1 m-auto mt-12 sm:max-w-lg lg:max-w-md">
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="space-y-5"
@@ -108,7 +117,7 @@ export default () => {
                                 Enviar
                             </button> */}
                         </form>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </main>

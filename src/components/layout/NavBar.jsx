@@ -97,13 +97,12 @@ export default () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuTrigger>Servicios</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.1fr_1fr]">
                 <li className="row-span-3">
-                  <img className="flex w-44 h-56" src={"https://i.pinimg.com/originals/9b/20/d6/9b20d6f8b2361ef151b2e2dc4b85076a.jpg"}></img>
-                  {/* <NavigationMenuLink asChild>
+                  <NavigationMenuLink asChild>
                     <a
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       href="/"
@@ -117,7 +116,7 @@ export default () => {
                         Source.
                       </p>
                     </a>
-                  </NavigationMenuLink> */}
+                  </NavigationMenuLink>
                 </li>
                 <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Firma digital">
                   API para firmar documentos de forma digital en pocos pasos
@@ -130,7 +129,7 @@ export default () => {
                 </ListItem>
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           {/* <NavigationMenuItem>
           <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
           <NavigationMenuContent>

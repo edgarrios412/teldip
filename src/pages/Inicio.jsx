@@ -10,17 +10,26 @@ import code from "../assets/code.svg"
 import apis from "../assets/apis.svg"
 import security from "../assets/security.svg"
 import integration from "../assets/integration.svg"
+import animation from "../assets/animation.json"
 import { useEffect, useRef, useState } from "react"
 import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
+import Lottie from "lottie-react"
+import { Link } from "react-router-dom"
 const Inicio = () => {
 
     const barRef = useRef(null)
     const ref = useRef(null)
+    const lottieRef = useRef(null)
     const serviceInView = useInView(ref, { once: false })
     const barInView = useInView(barRef, { once: false })
 
     const controls = useAnimation()
     const controlsBar = useAnimation()
+
+    useEffect(() => {
+        lottieRef?.current?.setSpeed(2)
+        console.log(lottieRef?.current)
+    },[])
 
     useEffect(() => {
         if (serviceInView) {
@@ -56,9 +65,9 @@ const Inicio = () => {
     }, [index])
 
     const floatAnimation = {
-        y: ["4%", "-4%", "4%"],
+        y: ["2%", "-2%", "2%"],
         transition: {
-          duration: 7,
+          duration: 10,
           repeat: Infinity,
           ease: "easeInOut",
         },
@@ -72,7 +81,7 @@ const Inicio = () => {
     return (
         <>
             <div style={{ height: "fit-content" }}>
-                <div className="flex flex-col p-10 items-center lg:flex-row lg:justify-center text-center m-auto lg:flex gap-32 my-32">
+                <div className="flex flex-col-reverse p-6 items-center lg:flex-row lg:my-32 lg:justify-center text-center m-auto lg:flex gap-10">
                     <motion.div
                         className="max-w-[700px]"
                         initial={{ opacity: 0, x: 75 }}
@@ -85,7 +94,7 @@ const Inicio = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 1 }}
-                                className="font-bold text-[56px] text-slate-800 leading-[55px]">{textos[index]}<br></br>
+                                className="font-bold text-[40px] leading-[45px] lg:text-[56px] text-slate-800 lg:leading-[55px]">{textos[index]}<br></br>
                                 {/* <br></br> */}
                             </motion.p>
                         <motion.p 
@@ -94,15 +103,18 @@ const Inicio = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1 }}
-                        className="font-medium text-xl font-[OpenSans] text-slate-500 mt-5">{subtitulos[index]}</motion.p>
+                        className="font-medium text-[17px] lg:text-xl font-[OpenSans] text-slate-500 mt-5">{subtitulos[index]}</motion.p>
+                        <Link to="/contacto">
                         <button
-                            className="font-medium text-lg mt-10 text-white p-3 rounded-lg bg-[#00bfa6]">Ponte en contacto con nosotros</button>
+                            className="font-medium text-lg mt-10 text-white p-3 rounded-lg bg-[#20af66]">Ponte en contacto con nosotros</button>
+                        </Link>
                     </motion.div>
+                    {/* <Lottie lottieRef={lottieRef} animationData={animation} loop={true} /> */}
                     <motion.img
                         initial={{ opacity: 1}}
                         animate={floatAnimation}
                         transition={{ duration: 2, delay: 2 }}
-                        src={code} className="h-96" />
+                        src={"https://desarrollodesoftware.com.co/storage-desarrollo/recorte-isotipo222.jpg"} className="max-h-96" />
                 </div>
                 <div className="flex mt-56 flex-col items-center lg:flex-row justify-center gap-16 z-30">
                     <motion.div
@@ -114,7 +126,9 @@ const Inicio = () => {
                         <div className="-mt-36 p-10">
                             <h3 className="font-semibold text-xl text-center mb-6">APIs</h3>
                             <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 mb-6 h-20">Ofrecemos APIs que impulsan la conectividad, la innovación y la eficiencia de tus servicios, permitiendo una integración fluida y un desarrollo rápido.</h5>
+                            <Link to="/contacto">
                             <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
+                            </Link>
                         </div>
                     </motion.div >
                     <motion.div
@@ -125,8 +139,9 @@ const Inicio = () => {
                         <div className="-mt-36 p-10">
                             <h3 className="font-semibold text-xl text-center mb-6">Ciberseguridad</h3>
                             <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 mb-6 h-20">Ofrecemos soluciones de cyberseguridad personalizadas para proteger tus activos digitales, garantizando la continuidad del negocio y la privacidad de los usuarios.</h5>
+                            <Link to="/contacto">
                             <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
-                        </div>
+                            </Link>                        </div>
                     </motion.div >
                     <motion.div
                         initial={{ opacity: 0, y: 75 }}
@@ -136,8 +151,9 @@ const Inicio = () => {
                         <div className="-mt-36 p-10">
                             <h3 className="font-semibold text-xl text-center mb-6">Integraciones</h3>
                             <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 mb-6 h-20">Ofrecemos integraciones que optimizan los procesos, mejorando la eficiencia y productividad de tu negocio.</h5>
+                            <Link to="/contacto">
                             <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
-                        </div>
+                            </Link>                        </div>
                     </motion.div >
                 </div>
                 {/* <div className={style.barraDiagonal}>
@@ -177,12 +193,14 @@ const Inicio = () => {
                             animate={controls}
                             transition={{ duration: 0.25, delay: 0.05 }}
 
-                            ref={ref} className="bg-teal-200 rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
+                            ref={ref} className="bg-[#20af66] rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
                             <img src={certificado} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Certificados digitales</h3>
                                 <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Asegura la integridad, validación y seguridad de tus documentos médicos con tecnología de vanguardia, garantizando la autenticidad y confiabilidad en el ámbito médico.</h5>
+                                <Link to="/contacto">
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
+                                </Link>
                             </div>
                         </motion.div>
                         <motion.div
@@ -194,13 +212,14 @@ const Inicio = () => {
                             animate={controls}
                             transition={{ duration: 0.25, delay: 0.10 }}
 
-                            ref={ref} className="bg-teal-200 rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
+                            ref={ref} className="bg-[#20af66] rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
                             <img src={tarjeta} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Tarjeta digital</h3>
                                 <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Documento virtual seguro y fácil de usar para autenticación y verificación, proporcionando una solución eficiente y confiable para la identificación en el mundo digital.</h5>
+                                <Link to="/contacto">
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
-                            </div>
+                                </Link>                            </div>
                         </motion.div>
                         <motion.div
                             variants={{
@@ -211,13 +230,14 @@ const Inicio = () => {
                             animate={controls}
                             transition={{ duration: 0.25, delay: 0.15 }}
 
-                            ref={ref} className="bg-teal-200 rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
+                            ref={ref} className="bg-[#20af66] rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
                             <img src={biometricos} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Biometricos</h3>
                                 <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Tecnología de seguridad avanzada para identificar y autenticar de manera única, ofreciendo un nivel de seguridad sin precedentes y personalización en la autenticación.</h5>
+                                <Link to="/contacto">
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
-                            </div>
+                                </Link>                            </div>
                         </motion.div>
                         <motion.div
                             variants={{
@@ -228,13 +248,14 @@ const Inicio = () => {
                             animate={controls}
                             transition={{ duration: 0.25, delay: 0.20 }}
 
-                            ref={ref} className="bg-teal-200 rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
+                            ref={ref} className="bg-[#20af66] rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[152px] p-10">
                             <img src={firma} className="h-60 m-auto -translate-y-32" />
                             <div className="-mt-24">
                                 <h3 className="font-semibold text-lg">Firma digital</h3>
                                 <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Validación electrónica de documentos con seguridad y autenticidad, asegurando la integridad y confiabilidad de las firmas en el ámbito digital.</h5>
+                                <Link to="/contacto">
                                 <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button>
-                            </div>
+                                </Link>                            </div>
                         </motion.div>
                     </motion.div>
                 </div>
