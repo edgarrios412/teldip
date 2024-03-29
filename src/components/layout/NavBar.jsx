@@ -154,7 +154,7 @@ export default () => {
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
-        {!isLogged ?
+        {/*{!isLogged ?
           <ModalLogin open={open} setIsLogged={setIsLogged} setOpen={setOpen} /> :
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -183,8 +183,8 @@ export default () => {
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              {/* <DropdownMenuSeparator /> */}
-              {/* <DropdownMenuGroup>
+              {/* <DropdownMenuSeparator /> 
+              <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Users className="mr-2 h-4 w-4" />
                   <span>Equipo</span>
@@ -217,8 +217,8 @@ export default () => {
                   <span>Nuevo equipo</span>
                   <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
                 </DropdownMenuItem>
-              </DropdownMenuGroup> */}
-              {/* <DropdownMenuSeparator />
+              </DropdownMenuGroup> 
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <LifeBuoy className="mr-2 h-4 w-4" />
                 <span>Soporte</span>
@@ -226,7 +226,7 @@ export default () => {
               <DropdownMenuItem disabled>
                 <Cloud className="mr-2 h-4 w-4" />
                 <span>API</span>
-              </DropdownMenuItem> */}
+        </DropdownMenuItem> *CERRAR/}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => { setIsLogged(false); setOpen(false) }}>
                 <LogOut className="mr-2 h-4 w-4" />
@@ -236,7 +236,7 @@ export default () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-        }
+        }*/}
       </NavigationMenu>
     </div>
   );
