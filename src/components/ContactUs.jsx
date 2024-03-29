@@ -34,7 +34,7 @@ export default () => {
 
     return (
         <>
-        <main className="py-14 mt-28">
+        <main className="py-14 lg:mt-28">
             <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
                 <div className="max-w-lg mx-auto gap-12 justify-between lg:flex lg:max-w-none">
                     <motion.div 
