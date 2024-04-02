@@ -85,6 +85,13 @@ export default () => {
   useEffect(() => {
     console.log(isLogged)
   }, [isLogged])
+
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      setIsLogged(true)
+    }
+  },[])
+
   return (
     <div className={style.navbar}>
       <NavigationMenu className="w-screen font-[OpenSans] max-w-full py-6 flex justify-around">
@@ -97,7 +104,7 @@ export default () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          {/* <NavigationMenuItem>
+          <NavigationMenuItem>
             <NavigationMenuTrigger>Servicios</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.1fr_1fr]">
@@ -129,7 +136,7 @@ export default () => {
                 </ListItem>
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem> */}
+          </NavigationMenuItem>
           {/* <NavigationMenuItem>
           <NavigationMenuTrigger>Inicio</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -154,12 +161,12 @@ export default () => {
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
-        {/*{!isLogged ?
+        {!isLogged ?
           <ModalLogin open={open} setIsLogged={setIsLogged} setOpen={setOpen} /> :
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar role="button">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
@@ -167,17 +174,17 @@ export default () => {
               <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
                   <span>Perfil</span>
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                   <CreditCard className="mr-2 h-4 w-4" />
                   <span>Pagos</span>
                   <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer">
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Ajustes</span>
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
@@ -226,17 +233,17 @@ export default () => {
               <DropdownMenuItem disabled>
                 <Cloud className="mr-2 h-4 w-4" />
                 <span>API</span>
-        </DropdownMenuItem> *CERRAR/}
+        </DropdownMenuItem> */}
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => { setIsLogged(false); setOpen(false) }}>
+              <DropdownMenuItem className="cursor-pointer hover:!bg-red-300" onClick={() => { setIsLogged(false); localStorage.removeItem("token"); setOpen(false) }}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Cerrar sesion</span>
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-        }*/}
+        }
       </NavigationMenu>
     </div>
   );

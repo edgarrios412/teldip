@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils"
 // import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from "axios";
 export default ({open, setOpen, setIsLogged}) => {
 
   // const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -69,17 +70,37 @@ export default ({open, setOpen, setIsLogged}) => {
 }
 
 function ProfileForm({ className, setIsLogged }) {
+
+  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+
+  const authUser = (e) => {
+    e.preventDefault()
+    axios.post("http://localhost:3001/user/auth",{
+      email,
+      password
+    }).then(({data}) => {
+      console.log(data)
+      if(data.token){
+        localStorage.setItem("token", data.token)
+        setIsLogged(true)
+      }
+    },(e) => {
+      alert(e.response.data)
+    })
+  }
+
   return (
-    <form className={cn("grid items-start gap-4", className)}>
+    <form onSubmit={authUser} className={cn("grid items-start gap-4", className)}>
       <div className="grid gap-2">
         <Label htmlFor="email">Correo electronico</Label>
-        <Input type="email" id="email" />
+        <Input className={"font-[OpenSans] text-sm"} onChange={(e) => setEmail(e.target.value)} type="email" id="email" />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="username">Contraseña</Label>
-        <Input type="password" id="password" />
+        <Input className={"font-[OpenSans] text-sm"} onChange={(e) => setPassword(e.target.value)} type="password" id="password" />
       </div>
-      <Button type="button" onClick={() => setIsLogged(true)}>Ingresar</Button>
+      <Button type="submit">Ingresar</Button>
     </form>
   )
 }
