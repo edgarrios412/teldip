@@ -174,12 +174,14 @@ export default () => {
               <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
+                <Link to="/perfil">
                 <DropdownMenuItem className="cursor-pointer">
                   <User className="mr-2 h-4 w-4" />
                   <span>Perfil</span>
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
+                </Link>
+                {/* <DropdownMenuItem className="cursor-pointer">
                   <CreditCard className="mr-2 h-4 w-4" />
                   <span>Pagos</span>
                   <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
@@ -188,7 +190,7 @@ export default () => {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Ajustes</span>
                   <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </DropdownMenuGroup>
               {/* <DropdownMenuSeparator /> 
               <DropdownMenuGroup>
