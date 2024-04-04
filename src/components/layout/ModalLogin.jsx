@@ -76,7 +76,7 @@ function ProfileForm({ className, setIsLogged }) {
 
   const authUser = (e) => {
     e.preventDefault()
-    axios.post("http://localhost:3001/user/auth",{
+    axios.post("/user/auth",{
       email,
       password
     }).then(({data}) => {

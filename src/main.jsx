@@ -6,7 +6,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { NextUIProvider } from '@nextui-org/react'
 import { NavigationProvider } from './utils/context/Navigation/NavigationProvider.jsx';
 import NavBar from './components/layout/NavBar.jsx';
+import axios from 'axios';
 
+axios.defaults.baseURL = 'https://back-teldip.onrender.com';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     // <NextUIProvider>
