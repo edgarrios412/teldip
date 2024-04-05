@@ -14,7 +14,7 @@ import {
   Mail,
   Settings,
   User,
-  ChevronLeft
+  ChevronLeft,
 } from "lucide-react";
 import { useState } from "react";
 import Perfil from "./Profile/Perfil";
@@ -24,25 +24,62 @@ import Documentacion from "./Profile/Documentacion";
 import Soporte from "./Profile/Soporte";
 import Ajustes from "./Profile/Ajustes";
 import { Link } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Profile = () => {
   const [page, setPage] = useState(1);
+  const [sizePanel, setSizePanel] = useState(null);
   return (
     <div className="h-[100vh] w-[100%]">
       <ResizablePanelGroup
         direction="horizontal"
         className="h-full rounded-lg border"
       >
-        <ResizablePanel defaultSize={20} maxSize={20} minSize={15}>
+        <ResizablePanel
+          onResize={(e) => {
+            setSizePanel(e);
+            console.log(e);
+          }}
+          defaultSize={20}
+          maxSize={20}
+          minSize={6}
+        >
           <div className="flex-row h-full max-w-96 p-2">
-            <div className="mb-2 p-5 justify-start">
-              <h2 className="font-[OpenSans] text-xl">
-                Hola <b>Edgar!</b>
-              </h2>
-              <span className="font-[OpenSans] text-xs text-gray-400">
-                Ultima conexión: 05/03/24 06:15
-              </span>
-            </div>
+            {sizePanel > 14 ? (
+              <div className="mb-2 p-5 justify-start">
+                <h2 className="font-[OpenSans] text-xl">
+                  Hola <b>Edgar!</b>
+                </h2>
+                <span className="font-[OpenSans] text-xs text-gray-400">
+                  Ultima conexión: 05/03/24 06:15
+                </span>
+              </div>
+            ) : (
+              <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="w-full">
+                  <User
+                    className={`${sizePanel < 14 ? "m-auto my-12" : "mr-auto"}`}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <div className="p-5 justify-start">
+                    <h2 className="font-[OpenSans] text-xl">
+                      Hola <b>Edgar!</b>
+                    </h2>
+                    <span className="font-[OpenSans] text-xs text-gray-400">
+                      Ultima conexión: 05/03/24 06:15
+                    </span>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+              </TooltipProvider>
+            )}
             <DropdownMenuSeparator />
             <Button
               onClick={() => setPage(1)}
@@ -50,7 +87,20 @@ const Profile = () => {
                 page == 1 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <User className="mr-4 h-4 w-4" /> Perfil
+              {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <User className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`} />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Perfil</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <User className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`} />
+              )}
+              {sizePanel > 14 && "Perfil"}
             </Button>
             <Button
               onClick={() => setPage(2)}
@@ -58,7 +108,25 @@ const Profile = () => {
                 page == 2 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <CreditCard className="mr-4 h-4 w-4" /> Pagos
+            
+              {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <CreditCard
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Pagos</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <CreditCard
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+              )}
+              {sizePanel > 14 && "Pagos"}
             </Button>
             <Button
               onClick={() => setPage(3)}
@@ -66,7 +134,25 @@ const Profile = () => {
                 page == 3 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <LayoutList className="mr-4 h-4 w-4" /> Servicios
+              
+              {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <LayoutList
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Servicios</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <LayoutList
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+              )}
+              {sizePanel > 14 && "Servicios"}
             </Button>
             <Button
               onClick={() => setPage(4)}
@@ -74,7 +160,25 @@ const Profile = () => {
                 page == 4 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <FileCode className="mr-4 h-4 w-4" /> Documentación
+              
+              {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <FileCode
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Documentación</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <FileCode
+                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                />
+              )}
+              {sizePanel > 14 && "Documentación"}
             </Button>
             {/* <Button
               onClick={() => setPage(5)}
@@ -82,7 +186,7 @@ const Profile = () => {
                 page == 5 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <HeartHandshake className="mr-4 h-4 w-4" /> Soporte
+              <HeartHandshake className={`${sizePanel < 14 ? "":"mr-4 h-4 w-4"}`} /> Soporte
             </Button> */}
             {/* <Button
               onClick={() => setPage(6)}
@@ -90,11 +194,29 @@ const Profile = () => {
                 page == 6 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <Settings className="mr-4 h-4 w-4" /> Ajustes
+              <Settings className={`${sizePanel < 14 ? "":"mr-4 h-4 w-4"}`} /> Ajustes
             </Button> */}
             <Link to="/">
               <Button className="font-[OpenSans] bg-transparent mb-2 justify-start text-black w-full border-2 border-transparent hover:bg-transparent hover:bg-red-200">
-                <ChevronLeft className="mr-4 h-4 w-4" /> Volver
+                
+                {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <ChevronLeft
+                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Volver</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <ChevronLeft
+                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  />
+              )}
+                {sizePanel > 14 && "Volver"}
               </Button>
             </Link>
             <Link to="/">
@@ -102,7 +224,25 @@ const Profile = () => {
                 onClick={() => localStorage.removeItem("token")}
                 className="font-[OpenSans] bg-transparent mb-2 justify-start text-black w-full border-2 border-transparent hover:bg-transparent hover:bg-red-200"
               >
-                <LogOut className="mr-4 h-4 w-4" /> Cerrar sesion
+                
+                {(sizePanel > 18 || sizePanel < 14) && (
+                sizePanel < 14 ? <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="w-full">
+                  <LogOut
+                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  />
+                  </TooltipTrigger>
+                  <TooltipContent side="right">
+                    <p>Cerrar sesion</p>
+                  </TooltipContent>
+                </Tooltip>
+                </TooltipProvider>:
+                <LogOut
+                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  />
+              )}
+                {sizePanel > 14 && "Cerrar sesion"}
               </Button>
             </Link>
           </div>
