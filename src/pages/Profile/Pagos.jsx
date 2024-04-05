@@ -11,6 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import mastercard from "../../assets/mastercard.png";
+import paypal from "../../assets/paypal.png";
 
 const invoices = [
   {
@@ -71,7 +73,45 @@ const Pagos = () => {
             <Button type="submit">Recargar saldo</Button>
           </div>
         </div>
-        <p className="text-gray-400 p-3.5 text-sm">Evita que tus servicios sean suspendidos, mantén siempre tu cuenta con saldo positivo</p>
+        <p className="text-gray-400 p-3.5 text-sm">
+          Evita que tus servicios sean suspendidos, mantén siempre tu cuenta con
+          saldo positivo
+        </p>
+        <div className="p-3.5">
+          <h2 className="font-bold py-3">Metodos de pagos</h2>
+          <div className="flex flex-col gap-4">
+            <div className="hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer flex items-center space-x-4 rounded-md border p-4">
+              {/* <QrCode /> */}
+              <img src={mastercard} className="w-10" />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-bold leading-none">
+                  XXXX-XXXX-XXXX-3527
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Vencimiento 04/24
+                </p>
+              </div>
+              <Button className="bg-transparent text-black font-bold hover:bg-gray-300">
+                Eliminar
+              </Button>
+            </div>
+            <div className="hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer flex items-center space-x-4 rounded-md border p-4">
+              {/* <QrCode /> */}
+              <img src={paypal} className="w-10" />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-bold leading-none">
+                  Edgar David Vilchez
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  edgarrios412@gmail.com
+                </p>
+              </div>
+              <Button className="bg-transparent text-black font-bold hover:bg-gray-300">
+                Eliminar
+              </Button>
+            </div>
+          </div>
+        </div>
         <h2 className="font-bold p-3.5">Historial de pagos</h2>
         <Table>
           <TableCaption>Estos son tus ultimos pagos</TableCaption>
