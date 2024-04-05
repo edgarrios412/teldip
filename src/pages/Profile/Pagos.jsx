@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -58,8 +59,8 @@ const invoices = [
 
 const Pagos = () => {
   return (
-    <>
-      <div className="px-20 py-10 font-[OpenSans]">
+    <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
+      <Card className="font-[OpenSans] px-10 py-5">
         <div className="p-3.5 flex justify-between">
           <div>
             <h2 className="text-sm">Tienes balance de</h2>
@@ -101,8 +102,8 @@ const Pagos = () => {
             </TableRow>
           </TableFooter>
         </Table>
-      </div>
-    </>
+      </Card>
+    </div>
   );
 };
 

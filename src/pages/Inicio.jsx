@@ -28,7 +28,6 @@ const Inicio = () => {
 
     useEffect(() => {
         lottieRef?.current?.setSpeed(2)
-        console.log(lottieRef?.current)
     },[])
 
     useEffect(() => {

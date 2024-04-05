@@ -237,7 +237,7 @@ export default () => {
                 <span>API</span>
         </DropdownMenuItem> */}
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer hover:!bg-red-300" onClick={() => { setIsLogged(false); localStorage.removeItem("token"); setOpen(false) }}>
+              <DropdownMenuItem className="cursor-pointer hover:!bg-red-200" onClick={() => { setIsLogged(false); localStorage.removeItem("token"); setOpen(false) }}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Cerrar sesion</span>
                 {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
