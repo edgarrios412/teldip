@@ -166,7 +166,7 @@ export default () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar role="button">
-                <AvatarImage src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" />
+                <AvatarImage className="bg-white" src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
