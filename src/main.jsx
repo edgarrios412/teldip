@@ -9,7 +9,7 @@ import NavBar from './components/layout/NavBar.jsx';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://back-teldip.onrender.com';
-
+// axios.defaults.baseURL = 'http://localhost:3001';
 // const location = useLocation()
 
 ReactDOM.createRoot(document.getElementById('root')).render(

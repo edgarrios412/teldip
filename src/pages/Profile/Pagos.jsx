@@ -13,6 +13,42 @@ import {
 } from "@/components/ui/table";
 import mastercard from "../../assets/mastercard.png";
 import paypal from "../../assets/paypal.png";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { CreditCard } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useEffect, useState } from "react";
 
 const invoices = [
   {
@@ -60,6 +96,44 @@ const invoices = [
 ];
 
 const Pagos = () => {
+
+  const [open, setOpen] = useState(false)
+  const [monto, setMonto] = useState(0)
+
+  const pagarAhora = () => {
+    setOpen(false)
+    var checkout = new WidgetCheckout({
+      currency: "COP",
+      amountInCents: monto+"00",
+      reference: "123123123",
+      publicKey: "pub_prod_HEgZ1pvNEzFzbZvyz6TYo9uhUghfZDGi",
+    });
+    checkout.open(function (result) {
+      var transaction = result.transaction;
+      if (transaction.status == "APPROVED") {
+        toast.success("Compra exitosa");
+        axios.post("/buy", {
+          transaction: transaction,
+          userId: user.id,
+          packId: pack.id,
+          person: dataPay.person,
+          reserva: true,
+          inicio: dataPay.inicio,
+          fin: dataPay.fin,
+          email: user.email,
+          passenger: passenger,
+          comprado: dayjs().format("YYYY-MM-DD"),
+        });
+        // TODO: ENVIAR COMPROBANTE Y DATOS DE LOS PASAJEROS AL CORREO DE VIAJAYA
+        // setTimeout(() => {
+        //   navigate("/profile");
+        // }, 2000);
+      } else {
+        toast.error("No pudimos realizar el pago");
+      }
+    });
+  };
+
   return (
     <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <Card className="font-[OpenSans] px-10 py-5">
@@ -68,9 +142,82 @@ const Pagos = () => {
             <h2 className="text-sm">Tienes balance de</h2>
             <h2 className="font-bold text-2xl">$250.000</h2>
           </div>
-          <div className="flex w-full max-w-sm items-center space-x-2">
-            <Input type="number" placeholder="Saldo" />
-            <Button type="submit">Recargar saldo</Button>
+          <div className="flex max-w-sm items-left">
+            {/* <Input type="number" placeholder="Saldo" /> */}
+            <Sheet onOpenChange={setOpen} open={open}>
+              <SheetTrigger className="text-left">
+                <Button type="submit">Recargar saldo</Button>
+              </SheetTrigger>
+              <SheetContent className="w-full">
+                <ScrollArea>
+                  <SheetHeader>
+                    <SheetTitle>Recargar saldo</SheetTitle>
+                    <br></br>
+                    <SheetDescription className={"font-[OpenSans] px-1"}>
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <Label htmlFor="email">Monto a recargar</Label>
+                        <Input
+                          type="number"
+                          id="email"
+                          value={monto}
+                          onChange={(e) => setMonto(e.target.value)}
+                          placeholder="Cantidad"
+                        />
+                      </div>
+
+                      <Select className="w-full font-[OpenSans]">
+                        <SelectTrigger className="w-full text-left h-fit my-4">
+                          <SelectValue placeholder="Metodo de pago" />
+                        </SelectTrigger>
+                        <SelectContent className="font-[OpenSans]">
+                          <SelectGroup>
+                            {/* <SelectLabel>Fruits</SelectLabel> */}
+                            <SelectItem value="apple">
+                              <div className=" transition-all cursor-pointer flex items-center space-x-4 p-4">
+                                {/* <QrCode /> */}
+                                <img src={mastercard} className="w-10" />
+                                <div className="flex-1 space-y-1">
+                                  <p className="text-sm font-bold leading-none">
+                                    XXXX-XXXX-XXXX-3527
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    Vencimiento 04/24
+                                  </p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                            <SelectItem value="banana">
+                              <div className="transition-all cursor-pointer flex items-center space-x-4 p-4">
+                                {/* <QrCode /> */}
+                                <img src={paypal} className="w-10" />
+                                <div className="flex-1 space-y-1">
+                                  <p className="text-sm font-bold leading-none">
+                                    Edgar David Vilchez
+                                  </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    edgarrios412@gmail.com
+                                  </p>
+                                </div>
+                              </div>
+                            </SelectItem>
+                            {/* <SelectItem value="blueberry">Blueberry</SelectItem>
+                            <SelectItem value="grapes">Grapes</SelectItem>
+                            <SelectItem value="pineapple">Pineapple</SelectItem> */}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        className="w-full"
+                        onClick={pagarAhora}
+                      >
+                        <CreditCard className="mx-2 w-5" />
+                        Pagar ahora
+                      </Button>
+                    </SheetDescription>
+                  </SheetHeader>
+                </ScrollArea>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
         <p className="text-gray-400 p-3.5 text-sm">

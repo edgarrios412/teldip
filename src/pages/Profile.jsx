@@ -91,14 +91,14 @@ const Profile = () => {
                 sizePanel < 14 ? <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger className="w-full">
-                  <User className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`} />
+                  <User className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`} />
                   </TooltipTrigger>
                   <TooltipContent side="right">
                     <p>Perfil</p>
                   </TooltipContent>
                 </Tooltip>
                 </TooltipProvider>:
-                <User className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`} />
+                <User className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`} />
               )}
               {sizePanel > 14 && "Perfil"}
             </Button>
@@ -114,7 +114,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger className="w-full">
                   <CreditCard
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
                   </TooltipTrigger>
                   <TooltipContent side="right">
@@ -123,7 +123,7 @@ const Profile = () => {
                 </Tooltip>
                 </TooltipProvider>:
                 <CreditCard
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
               )}
               {sizePanel > 14 && "Pagos"}
@@ -140,7 +140,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger className="w-full">
                   <LayoutList
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
                   </TooltipTrigger>
                   <TooltipContent side="right">
@@ -149,7 +149,7 @@ const Profile = () => {
                 </Tooltip>
                 </TooltipProvider>:
                 <LayoutList
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
               )}
               {sizePanel > 14 && "Servicios"}
@@ -166,7 +166,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger className="w-full">
                   <FileCode
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
                   </TooltipTrigger>
                   <TooltipContent side="right">
@@ -175,7 +175,7 @@ const Profile = () => {
                 </Tooltip>
                 </TooltipProvider>:
                 <FileCode
-                  className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                  className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                 />
               )}
               {sizePanel > 14 && "Documentación"}
@@ -186,7 +186,7 @@ const Profile = () => {
                 page == 5 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <HeartHandshake className={`${sizePanel < 14 ? "":"mr-4 h-4 w-4"}`} /> Soporte
+              <HeartHandshake className={`${sizePanel < 14 ? "m-auto":"mr-4 h-4 w-4"}`} /> Soporte
             </Button> */}
             {/* <Button
               onClick={() => setPage(6)}
@@ -194,7 +194,7 @@ const Profile = () => {
                 page == 6 ? "bg-green-200" : "bg-transparent"
               }`}
             >
-              <Settings className={`${sizePanel < 14 ? "":"mr-4 h-4 w-4"}`} /> Ajustes
+              <Settings className={`${sizePanel < 14 ? "m-auto":"mr-4 h-4 w-4"}`} /> Ajustes
             </Button> */}
             <Link to="/">
               <Button className="font-[OpenSans] bg-transparent mb-2 justify-start text-black w-full border-2 border-transparent hover:bg-transparent hover:bg-red-200">
@@ -204,7 +204,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger className="w-full">
                   <ChevronLeft
-                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                    className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                   />
                   </TooltipTrigger>
                   <TooltipContent side="right">
@@ -213,7 +213,7 @@ const Profile = () => {
                 </Tooltip>
                 </TooltipProvider>:
                 <ChevronLeft
-                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                    className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                   />
               )}
                 {sizePanel > 14 && "Volver"}
@@ -230,7 +230,7 @@ const Profile = () => {
                 <Tooltip>
                   <TooltipTrigger className="w-full">
                   <LogOut
-                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                    className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                   />
                   </TooltipTrigger>
                   <TooltipContent side="right">
@@ -239,7 +239,7 @@ const Profile = () => {
                 </Tooltip>
                 </TooltipProvider>:
                 <LogOut
-                    className={`${sizePanel < 14 ? "" : "mr-4 h-4 w-4"}`}
+                    className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
                   />
               )}
                 {sizePanel > 14 && "Cerrar sesion"}
