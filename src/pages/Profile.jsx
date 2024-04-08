@@ -16,7 +16,7 @@ import {
   User,
   ChevronLeft,
 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Perfil from "./Profile/Perfil";
 import Pagos from "./Profile/Pagos";
 import Servicios from "./Profile/Servicios";
@@ -30,8 +30,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { UserContext } from "@/utils/context/User/UserContext";
 
 const Profile = () => {
+  const {usuario} = useContext(UserContext)
   const [page, setPage] = useState(1);
   const [sizePanel, setSizePanel] = useState(null);
   return (
@@ -53,7 +55,7 @@ const Profile = () => {
             {sizePanel > 14 ? (
               <div className="mb-2 p-5 justify-start">
                 <h2 className="font-[OpenSans] text-xl">
-                  Hola <b>Edgar!</b>
+                  Hola <b>{usuario.name}!</b>
                 </h2>
                 <span className="font-[OpenSans] text-xs text-gray-400">
                   Ultima conexión: 05/03/24 06:15

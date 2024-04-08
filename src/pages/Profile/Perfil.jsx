@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import {
   Sheet,
@@ -32,6 +32,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { UserContext } from "@/utils/context/User/UserContext";
 
 const notifications = [
   {
@@ -53,11 +54,12 @@ const Perfil = ({ className, ...props }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
+  const {usuario} = useContext(UserContext)
 
   const createTicket = () => {
     axios
       .post("/user/ticket", {
-        userId: 2,
+        userId: usuario.id,
         message,
       })
       .then(({ data }) => {
@@ -71,7 +73,7 @@ const Perfil = ({ className, ...props }) => {
       return alert("Las contreñas no coinciden");
     axios
       .put("/user/password", {
-        userId: 1,
+        userId: usuario.id,
         password: oldPassword,
         newpassword: newPassword,
       })

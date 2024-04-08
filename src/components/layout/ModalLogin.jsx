@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 // import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { UserContext } from "@/utils/context/User/UserContext";
 
 export default ({ open, setOpen, setIsLogged }) => {
   // const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -67,7 +68,9 @@ export default ({ open, setOpen, setIsLogged }) => {
   );
 };
 
+
 function LoginForm({ className, setIsLogged, setLogin }) {
+  const {setUsuario} = useContext(UserContext)
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isLoader, setIsLoader] = useState(false);
@@ -86,6 +89,7 @@ function LoginForm({ className, setIsLogged, setLogin }) {
           if (data.token) {
             localStorage.setItem("token", data.token);
             setIsLogged(true);
+            setUsuario(data.user)
           }
           setIsLoader(false);
         },

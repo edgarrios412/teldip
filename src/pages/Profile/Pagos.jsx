@@ -48,7 +48,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/utils/context/User/UserContext";
 
 const invoices = [
   {
@@ -96,7 +97,7 @@ const invoices = [
 ];
 
 const Pagos = () => {
-
+  const {usuario} = useContext(UserContext)
   const [open, setOpen] = useState(false)
   const [monto, setMonto] = useState(0)
 
@@ -105,25 +106,25 @@ const Pagos = () => {
     var checkout = new WidgetCheckout({
       currency: "COP",
       amountInCents: monto+"00",
-      reference: "123123123",
+      reference: "123123123133",
       publicKey: "pub_test_w28dxS2v9clmkb8UbFrlkw3GxBUx3bsq",
     });
     checkout.open(function (result) {
       var transaction = result.transaction;
       if (transaction.status == "APPROVED") {
         toast.success("Compra exitosa");
-        axios.post("/buy", {
-          transaction: transaction,
-          userId: user.id,
-          packId: pack.id,
-          person: dataPay.person,
-          reserva: true,
-          inicio: dataPay.inicio,
-          fin: dataPay.fin,
-          email: user.email,
-          passenger: passenger,
-          comprado: dayjs().format("YYYY-MM-DD"),
-        });
+        // axios.post("/buy", {
+        //   transaction: transaction,
+        //   userId: user.id,
+        //   packId: pack.id,
+        //   person: dataPay.person,
+        //   reserva: true,
+        //   inicio: dataPay.inicio,
+        //   fin: dataPay.fin,
+        //   email: user.email,
+        //   passenger: passenger,
+        //   comprado: dayjs().format("YYYY-MM-DD"),
+        // });
         // TODO: ENVIAR COMPROBANTE Y DATOS DE LOS PASAJEROS AL CORREO DE VIAJAYA
         // setTimeout(() => {
         //   navigate("/profile");
@@ -140,7 +141,7 @@ const Pagos = () => {
         <div className="p-3.5 flex justify-between">
           <div>
             <h2 className="text-sm">Tienes balance de</h2>
-            <h2 className="font-bold text-2xl">$250.000</h2>
+            <h2 className="font-bold text-2xl">${usuario.balance}</h2>
           </div>
           <div className="flex max-w-sm items-left">
             {/* <Input type="number" placeholder="Saldo" /> */}
