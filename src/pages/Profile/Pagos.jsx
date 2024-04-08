@@ -106,7 +106,7 @@ const Pagos = () => {
     var checkout = new WidgetCheckout({
       currency: "COP",
       amountInCents: monto+"00",
-      reference: "123123123133",
+      reference: "12312312313332",
       publicKey: "pub_test_w28dxS2v9clmkb8UbFrlkw3GxBUx3bsq",
     });
     checkout.open(function (result) {
