@@ -106,7 +106,7 @@ const Pagos = () => {
       currency: "COP",
       amountInCents: monto+"00",
       reference: "123123123",
-      publicKey: "pub_prod_HEgZ1pvNEzFzbZvyz6TYo9uhUghfZDGi",
+      publicKey: "pub_test_w28dxS2v9clmkb8UbFrlkw3GxBUx3bsq",
     });
     checkout.open(function (result) {
       var transaction = result.transaction;
