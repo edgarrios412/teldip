@@ -10,8 +10,8 @@ import axios from "axios";
 import { UserProvider } from "./utils/context/User/UserProvider.jsx";
 import { Toaster } from "./components/ui/toaster.jsx";
 
-// axios.defaults.baseURL = "https://back-teldip.onrender.com";
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = "https://back-teldip.onrender.com";
+// axios.defaults.baseURL = 'http://localhost:3001';
 // const location = useLocation()
 
 ReactDOM.createRoot(document.getElementById("root")).render(

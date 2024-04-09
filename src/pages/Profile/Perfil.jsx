@@ -86,6 +86,7 @@ const Perfil = ({ className, ...props }) => {
       .then(({ data }) => {
         setMessage("");
         toast({
+          duration:3000,
           title: data.response,
           description: "En unas horas tu ticket será atendido por el equipo de soporte",
         })
@@ -108,7 +109,7 @@ const Perfil = ({ className, ...props }) => {
           setNewPassword("");
           setOldPassword("");
           toast({
-            time:1000,
+            duration:3000,
             title: data.response,
           })
         },
@@ -124,7 +125,7 @@ const Perfil = ({ className, ...props }) => {
       response: responseTicket
     }).then(() => {
       toast({
-        time:1000,
+        duration:3000,
         title: "Ticket respondido exitosamente",
         description: "Se ha enviado una notificación al usuario",
       })
@@ -397,7 +398,7 @@ const Perfil = ({ className, ...props }) => {
         </CardFooter>
       </Card>
 
-      <Card className={cn("mt-10 w-full", className)} {...props}>
+      {usuario.role > 1 && <Card className={cn("mt-10 w-full", className)} {...props}>
         <CardHeader>
           <CardTitle>Administración</CardTitle>
           <CardDescription>
@@ -467,7 +468,7 @@ const Perfil = ({ className, ...props }) => {
         </CardContent>
         <CardFooter>
         </CardFooter>
-      </Card>
+      </Card>}
     </motion.div>
   );
 };
