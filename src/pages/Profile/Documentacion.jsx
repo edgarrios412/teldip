@@ -1,3 +1,4 @@
+import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -9,7 +10,7 @@ import { Card } from "@/components/ui/card";
 
 const Documentacion = () => {
   return (
-    <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <Card className="p-10 font-[OpenSans]">
         <h2 className="font-semibold text-xl">API de firma digital</h2>
         <p className="text-sm text-gray-400">
@@ -164,7 +165,7 @@ const Documentacion = () => {
           </AccordionItem>
         </Accordion>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

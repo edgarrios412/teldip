@@ -1,3 +1,4 @@
+import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -50,6 +51,7 @@ import {
 } from "@/components/ui/select";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/utils/context/User/UserContext";
+import axios from "axios";
 
 const invoices = [
   {
@@ -97,51 +99,54 @@ const invoices = [
 ];
 
 const Pagos = () => {
-  const {usuario} = useContext(UserContext)
-  const [open, setOpen] = useState(false)
-  const [monto, setMonto] = useState(0)
+  const { usuario, updateUsuario } = useContext(UserContext);
+  const [open, setOpen] = useState(false);
+  const [monto, setMonto] = useState(0);
+
+  useEffect(() => {
+    console.log(usuario.historypays);
+  }, [usuario]);
 
   const pagarAhora = () => {
-    setOpen(false)
+    const reference = new Date().getTime().toString();
+    setOpen(false);
     var checkout = new WidgetCheckout({
       currency: "COP",
-      amountInCents: monto+"00",
-      reference: "12312312313332",
+      amountInCents: monto + "00",
+      reference: reference,
       publicKey: "pub_test_w28dxS2v9clmkb8UbFrlkw3GxBUx3bsq",
     });
     checkout.open(function (result) {
       var transaction = result.transaction;
       if (transaction.status == "APPROVED") {
-        toast.success("Compra exitosa");
-        // axios.post("/buy", {
-        //   transaction: transaction,
-        //   userId: user.id,
-        //   packId: pack.id,
-        //   person: dataPay.person,
-        //   reserva: true,
-        //   inicio: dataPay.inicio,
-        //   fin: dataPay.fin,
-        //   email: user.email,
-        //   passenger: passenger,
-        //   comprado: dayjs().format("YYYY-MM-DD"),
-        // });
-        // TODO: ENVIAR COMPROBANTE Y DATOS DE LOS PASAJEROS AL CORREO DE VIAJAYA
-        // setTimeout(() => {
-        //   navigate("/profile");
-        // }, 2000);
+        axios
+          .post("/user/historial", {
+            paymentMethod: transaction.paymentMethodType,
+            amount: transaction.amountInCents / 100,
+            status: true,
+            userId: usuario.id,
+          })
+          .then(() => updateUsuario());
       } else {
-        toast.error("No pudimos realizar el pago");
+        axios
+          .post("/user/historial", {
+            paymentMethod: transaction.paymentMethodType,
+            amount: transaction.amountInCents / 100,
+            status: false,
+            userId: usuario.id,
+          })
+          .then(() => updateUsuario());
       }
     });
   };
 
   return (
-    <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <Card className="font-[OpenSans] px-10 py-5">
         <div className="p-3.5 flex justify-between">
           <div>
             <h2 className="text-sm">Tienes balance de</h2>
-            <h2 className="font-bold text-2xl">${usuario.balance}</h2>
+            <h2 className="font-bold text-2xl">${Number(usuario.balance).toLocaleString()}</h2>
           </div>
           <div className="flex max-w-sm items-left">
             {/* <Input type="number" placeholder="Saldo" /> */}
@@ -207,10 +212,7 @@ const Pagos = () => {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
-                      <Button
-                        className="w-full"
-                        onClick={pagarAhora}
-                      >
+                      <Button className="w-full" onClick={pagarAhora}>
                         <CreditCard className="mx-2 w-5" />
                         Pagar ahora
                       </Button>
@@ -272,13 +274,31 @@ const Pagos = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
+            {usuario.historypays?.map((historial) => (
+              <TableRow key={historial.id}>
+                <TableCell className="font-medium">{historial.id}</TableCell>
+                <TableCell>
+                  {historial.status ? (
+                    <p className="bg-green-400 w-fit px-2 py-1 rounded-sm font-semibold text-green-900">
+                      Pagado
+                    </p>
+                  ) : (
+                    <p className="bg-red-400 w-fit px-2 py-1 rounded-sm font-semibold text-red-900">
+                      Rechazado
+                    </p>
+                  )}
+                </TableCell>
+                <TableCell>{historial.paymentMethod}</TableCell>
                 <TableCell className="text-right">
-                  {invoice.totalAmount}
+                  {historial.status ? (
+                    <p className="text-green-900">
+                      ${Number(historial.amount).toLocaleString()}
+                    </p>
+                  ) : (
+                    <p className="text-gray-400">
+                      ${Number(historial.amount).toLocaleString()}
+                    </p>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -286,12 +306,21 @@ const Pagos = () => {
           <TableFooter>
             <TableRow>
               <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2.500.000.00</TableCell>
+              <TableCell className="text-right">
+                $
+                {usuario.historypays
+                  ?.reduce(
+                    (acc, current) =>
+                      current.status ? acc + Number(current.amount) : acc,
+                    0
+                  )
+                  .toLocaleString()}
+              </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

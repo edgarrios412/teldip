@@ -5,10 +5,23 @@ import Datos from "./pages/Datos";
 import Servicios from "./pages/Servicios";
 import Profile from "./pages/Profile";
 import NavBar from "./components/layout/NavBar";
+import { useContext, useEffect } from "react";
+import axios from "axios"
+import { UserContext } from "./utils/context/User/UserContext";
 
 function App() {
 
   const location = useLocation()
+  const {setUsuario} = useContext(UserContext)
+
+  useEffect(() => {
+    if(localStorage.getItem("token")){
+      axios.get("/user/token/"+localStorage.getItem("token")).then(({data}) => {
+        setUsuario(data)
+      })
+    }
+  },[])
+
   return (
     <>
       {location.pathname != "/perfil" && <NavBar/>}

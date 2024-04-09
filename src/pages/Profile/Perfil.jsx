@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useContext, useState } from "react";
+import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
 import axios from "axios";
 import {
   Sheet,
@@ -91,7 +92,7 @@ const Perfil = ({ className, ...props }) => {
   };
 
   return (
-    <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <div className="flex gap-10">
         <Card className={cn("w-1/3", className)} {...props}>
           <CardHeader>
@@ -298,7 +299,7 @@ const Perfil = ({ className, ...props }) => {
           </Button>
         </CardFooter>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,3 +1,4 @@
+import { useInView, motion, useAnimation, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -67,7 +68,7 @@ const invoices = [
 
 const Servicios = () => {
   return (
-    <div className="bg-gray-100 font-[OpenSans] px-20 py-10">
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <Card className="font-[OpenSans] px-5 py-5">
         <CardHeader>
           <CardTitle>Nuestros servicios</CardTitle>
@@ -154,7 +155,7 @@ const Servicios = () => {
         </CardContent>
         {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
       </Card>
-    </div>
+    </motion.div>
   );
 };
 
