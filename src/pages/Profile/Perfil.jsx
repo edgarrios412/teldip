@@ -131,9 +131,15 @@ const Perfil = ({ className, ...props }) => {
       });
   };
 
+  const passReg = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+
   const updatePassword = () => {
     if (newPassword !== newPassword2)
       return alert("Las contreñas no coinciden");
+    if(!passReg.test(newPassword)) return toast({
+      variant:"destructive",
+      title:"La contraseña debe tener al menos 8 caracteres, una mayúscula y una minúscula"
+    })
     axios
       .put("/user/password", {
         userId: usuario.id,

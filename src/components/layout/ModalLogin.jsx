@@ -180,14 +180,31 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
   const [registroPassword, setRegistroPassword] = useState("")
   const [registroPassword2, setRegistroPassword2] = useState("")
 
+  const passReg = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+
   const registerUser = (e) => {
     e.preventDefault();
     setIsLoader(true);
+    3118268264
+    if(registroTelefono.length != 10){
+      setIsLoader(false)
+      return toast({
+        variant:"destructive",
+        title:"El número de telefono debe tener 10 números"
+      })
+    }
     if(registroPassword !== registroPassword2){
       setIsLoader(false)
       return toast({
         variant:"destructive",
         title:"Las contraseñas no coinciden"
+      })
+    }
+    if(!passReg.test(registroPassword)){
+      setIsLoader(false)
+      return toast({
+        variant:"destructive",
+        title:"La contraseña debe tener al menos 8 caracteres, una mayúscula y una minúscula"
       })
     }
     axios
