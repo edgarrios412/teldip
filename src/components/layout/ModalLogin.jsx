@@ -31,7 +31,7 @@ export default ({ open, setOpen, setIsLogged }) => {
   const [login, setLogin] = useState(true)
 
   return login ? (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog id={1} open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className={"font-xl"}>
           Ingresar
@@ -49,7 +49,7 @@ export default ({ open, setOpen, setIsLogged }) => {
       </DialogContent>
     </Dialog>
   ) : (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog id={2} open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className={"font-xl"}>
           Ingresar

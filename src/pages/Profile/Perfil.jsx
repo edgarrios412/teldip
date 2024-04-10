@@ -1,4 +1,10 @@
-import { BellRing, Check, Send, FileQuestion } from "lucide-react";
+import {
+  BellRing,
+  Check,
+  Send,
+  FileQuestion,
+  CalendarDays,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,6 +26,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +73,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { UserContext } from "@/utils/context/User/UserContext";
 import { useToast } from "@/components/ui/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { formatDate } from "@/utils/helpers/formatter";
 
 const notifications = [
   {
@@ -69,13 +99,13 @@ const notifications = [
 const Perfil = ({ className, ...props }) => {
   const [message, setMessage] = useState("");
   const [tickets, setTickets] = useState([]);
-  const [responseTicket, setResponseTicket] = useState("")
-  const [idSelected, setIdSelected] = useState(null)
+  const [responseTicket, setResponseTicket] = useState("");
+  const [idSelected, setIdSelected] = useState(null);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
   const { usuario, updateUsuario } = useContext(UserContext);
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const createTicket = () => {
     axios
@@ -86,11 +116,12 @@ const Perfil = ({ className, ...props }) => {
       .then(({ data }) => {
         setMessage("");
         toast({
-          duration:3000,
+          duration: 3000,
           title: data.response,
-          description: "En unas horas tu ticket será atendido por el equipo de soporte",
-        })
-        updateUsuario()
+          description:
+            "En unas horas tu ticket será atendido por el equipo de soporte",
+        });
+        updateUsuario();
       });
   };
 
@@ -109,9 +140,9 @@ const Perfil = ({ className, ...props }) => {
           setNewPassword("");
           setOldPassword("");
           toast({
-            duration:3000,
+            duration: 3000,
             title: data.response,
-          })
+          });
         },
         (e) => {
           alert(e.response.data);
@@ -120,19 +151,22 @@ const Perfil = ({ className, ...props }) => {
   };
 
   const handleResponseTicket = () => {
-    axios.put("/user/ticket/response",{
-      id: idSelected,
-      response: responseTicket
-    }).then(() => {
-      toast({
-        duration:3000,
-        title: "Ticket respondido exitosamente",
-        description: "Se ha enviado una notificación al usuario",
+    axios
+      .put("/user/ticket/response", {
+        id: idSelected,
+        response: responseTicket,
       })
-      setResponseTicket("")
-      setIdSelected(null)
-    })
-  }
+      .then(() => {
+        toast({
+          duration: 3000,
+          title: "Ticket respondido exitosamente",
+          description: "Se ha enviado una notificación al usuario",
+        });
+        setResponseTicket("");
+        setIdSelected(null);
+        getTickets();
+      });
+  };
 
   const getTickets = () => {
     axios.get("/user/ticket/listar").then(({ data }) => setTickets(data));
@@ -152,7 +186,9 @@ const Perfil = ({ className, ...props }) => {
         <Card className={cn("w-1/3", className)} {...props}>
           <CardHeader>
             <CardTitle>Notificaciones</CardTitle>
-            <CardDescription>Tienes 3 notificaciones no leídas</CardDescription>
+            <CardDescription>
+              Tienes {usuario.notifications?.length} notificaciones no leídas
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className=" flex items-center space-x-4 rounded-md border p-4">
@@ -168,23 +204,81 @@ const Perfil = ({ className, ...props }) => {
               <Switch />
             </div>
             <div>
-              {notifications.map((notification, index) => (
-                <div
-                  key={index}
-                  className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                >
-                  <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {notification.title}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {notification.description}
-                    </p>
+              {usuario.notifications
+                ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 2)
+                .map((notification, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+                  >
+                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {notification.message}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(notification.date)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
+            {usuario.notifications?.length > 2 && (
+              <Dialog>
+                <DialogTrigger>
+                  <p className="text-sm text-center mt-2 mb-2 font-semibold b hover:underline cursor-pointer">
+                    Ver más notificaciones
+                  </p>
+                </DialogTrigger>
+                <DialogContent className="font-[OpenSans]">
+                  <DialogHeader>
+                    <CardTitle>Notificaciones</CardTitle>
+                    <CardDescription>
+                      Tienes {usuario.notifications?.length} notificaciones no
+                      leídas
+                    </CardDescription>
+                  </DialogHeader>
+                  <div className=" flex items-center space-x-4 rounded-md border p-4">
+              <BellRing />
+              <div className="flex-1 space-y-1">
+                <p className="text-sm font-medium leading-none">
+                  Notificacion celular
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Recibir notificacion por sms
+                </p>
+              </div>
+              <Switch />
+            </div>
+            <div>
+              {usuario.notifications
+                ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map((notification, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+                  >
+                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {notification.message}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {formatDate(notification.date)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <DialogFooter>
+            <Button className="w-full">
+              <Check className="mr-2 h-4 w-4" /> Marcar todo como leído
+            </Button>
+          </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
           </CardContent>
           <CardFooter>
             <Button className="w-full">
@@ -344,38 +438,46 @@ const Perfil = ({ className, ...props }) => {
             solución a tu duda entonces puedes llenar el siguiente campo y
             explicarnos tu inquietud para poder ayudarte lo más rápido posible
           </h3>
-          {usuario.tickets?.length > 0 && <>
-          <p className="font-bold">Mis tickets abiertos</p>
-          <Table>
-            <TableCaption>
-              Estos son los últimos tickets enviados a soporte
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Id</TableHead>
-                <TableHead>Fecha</TableHead>
-                <TableHead>Mensaje</TableHead>
-                <TableHead>Mensaje</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {usuario.tickets?.map((ticket) => (
-                <TableRow key={ticket.id}>
-                  <TableCell className="font-medium">{ticket.id}</TableCell>
-                  <TableCell>{ticket.date}</TableCell>
-                  <TableCell>{ticket.message}</TableCell>
-                  <TableCell>{ticket.response ?? <p className="text-muted-foreground">Aún no han respondido tu ticket</p>}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            {/* <TableFooter>
+          {usuario.tickets?.length > 0 && (
+            <>
+              <p className="font-bold">Mis tickets abiertos</p>
+              <Table>
+                <TableCaption>
+                  Estos son los últimos tickets enviados a soporte
+                </TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Id</TableHead>
+                    <TableHead>Fecha</TableHead>
+                    <TableHead>Mensaje</TableHead>
+                    <TableHead>Mensaje</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {usuario.tickets?.map((ticket) => (
+                    <TableRow key={ticket.id}>
+                      <TableCell className="font-medium">{ticket.id}</TableCell>
+                      <TableCell>{formatDate(ticket.date)}</TableCell>
+                      <TableCell>{ticket.message}</TableCell>
+                      <TableCell>
+                        {ticket.response ?? (
+                          <p className="text-muted-foreground">
+                            Aún no han respondido tu ticket
+                          </p>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                {/* <TableFooter>
               <TableRow>
                 <TableCell colSpan={3}>Total</TableCell>
                 <TableCell className="text-right">$2,500.00</TableCell>
               </TableRow>
             </TableFooter> */}
-          </Table>
-          </>}
+              </Table>
+            </>
+          )}
           <div className="grid w-full gap-1.5">
             <Label htmlFor="message-2" className="font-bold mb-2">
               ¿En que podemos ayudarte?
@@ -398,77 +500,147 @@ const Perfil = ({ className, ...props }) => {
         </CardFooter>
       </Card>
 
-      {usuario.role > 1 && <Card className={cn("mt-10 w-full", className)} {...props}>
-        <CardHeader>
-          <CardTitle>Administración</CardTitle>
-          <CardDescription>
-            Mira y responde los tickets enviados a soporte
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <h3 className="text-sm text-muted-foreground my-4">
-            Si en la opcion de arriba no encontraste tu pregunta o no pudo dar
-            solución a tu duda entonces puedes llenar el siguiente campo y
-            explicarnos tu inquietud para poder ayudarte lo más rápido posible
-          </h3>
+      {usuario.role > 1 && (
+        <Card className={cn("mt-10 w-full", className)} {...props}>
+          <CardHeader>
+            <CardTitle>Administración</CardTitle>
+            <CardDescription>
+              Mira y responde los tickets enviados a soporte
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <h3 className="text-sm text-muted-foreground my-4">
+              Si en la opcion de arriba no encontraste tu pregunta o no pudo dar
+              solución a tu duda entonces puedes llenar el siguiente campo y
+              explicarnos tu inquietud para poder ayudarte lo más rápido posible
+            </h3>
 
-          <Table>
-            <TableCaption>
-              Estos son los últimos tickets enviados a soporte
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Id</TableHead>
-                <TableHead>Fecha</TableHead>
-                <TableHead>Usuario</TableHead>
-                <TableHead>Mensaje</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tickets?.map((ticket) => (
-                <TableRow key={ticket.id}>
-                  <TableCell className="font-medium">{ticket.id}</TableCell>
-                  <TableCell>{ticket.date}</TableCell>
-                  <TableCell>{ticket.userId}</TableCell>
-                  <TableCell>{ticket.message}</TableCell>
-                  <TableCell className="text-right">
-                    <Button onClick={() => setIdSelected(ticket.id)} className="bg-green-300 px-2 py-1 rounded-sm font-semibold text-black hover:bg-green-400 transition-all">Responder</Button>
-                  </TableCell>
+            <Table>
+              <TableCaption>
+                Estos son los últimos tickets enviados a soporte
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Id</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Usuario</TableHead>
+                  <TableHead>Mensaje</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-            {/* <TableFooter>
+              </TableHeader>
+              <TableBody>
+                {tickets?.map((ticket) => (
+                  <TableRow key={ticket.id}>
+                    <TableCell className="font-medium">{ticket.id}</TableCell>
+                    <TableCell>{formatDate(ticket.date)}</TableCell>
+                    <TableCell>
+                      <HoverCard>
+                        <HoverCardTrigger className="">
+                          <p className="underline cursor-pointer font-bold">
+                            {ticket.user.name} {ticket.user.lastname}
+                          </p>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-80" side="top">
+                          <div className="flex justify-between space-x-4">
+                            <Avatar>
+                              <AvatarImage src="https://github.com/vercel.png" />
+                              <AvatarFallback>VC</AvatarFallback>
+                            </Avatar>
+                            <div className="space-y-1">
+                              <h4 className="text-sm font-semibold">
+                                {ticket.user.name} {ticket.user.lastname}
+                              </h4>
+                              <p className="text-sm">
+                                <b>Telefono:</b> {ticket.user.phone} <br></br>
+                                <b>Correo:</b> {ticket.user.email} <br></br>
+                                <b>Balance:</b> $
+                                {Number(ticket.user.balance).toLocaleString()}{" "}
+                                <br></br>
+                                <b>Rol:</b> {ticket.user.role}
+                              </p>
+                              <div className="flex items-center pt-2">
+                                <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
+                                <span className="text-xs text-muted-foreground">
+                                  Se registró el{" "}
+                                  {formatDate(ticket.user.createdDate)}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    </TableCell>
+                    <TableCell>{ticket.message}</TableCell>
+                    <TableCell className="text-right">
+                      {ticket.response ? (
+                        <HoverCard>
+                          <HoverCardTrigger className="">
+                            <Button
+                              onClick={() => setIdSelected(ticket.id)}
+                              className="bg-green-300 px-2 py-1 rounded-sm font-semibold text-black hover:bg-green-400 transition-all"
+                            >
+                              Cambiar respuesta
+                            </Button>
+                          </HoverCardTrigger>
+                          <HoverCardContent
+                            className="w-80 text-left"
+                            side="top"
+                          >
+                            <h4 className="text-sm font-semibold">Respuesta</h4>
+                            <p className="text-sm mt-2">{ticket.response}</p>
+                            <div className="flex items-center pt-2">
+                              <CalendarDays className="mr-2 h-4 w-4 opacity-70" />{" "}
+                              <span className="text-xs text-muted-foreground">
+                                Se registró el {formatDate(ticket.responseDate)}
+                              </span>
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      ) : (
+                        <Button
+                          onClick={() => setIdSelected(ticket.id)}
+                          className="bg-green-300 px-2 py-1 rounded-sm font-semibold text-black hover:bg-green-400 transition-all"
+                        >
+                          Responder
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              {/* <TableFooter>
               <TableRow>
                 <TableCell colSpan={3}>Total</TableCell>
                 <TableCell className="text-right">$2,500.00</TableCell>
               </TableRow>
             </TableFooter> */}
-          </Table>
-          
-          {idSelected && <>
-          <div className="grid w-full gap-1.5">
-            <Label htmlFor="message-2" className="font-bold mb-2">
-              Responder a ID: {idSelected}
-            </Label>
-            <Textarea
-              placeholder="Escribe tu respuesta"
-              value={responseTicket}
-              onChange={(e) => setResponseTicket(e.target.value)}
-              id="message-2"
-              />
-            <p className="text-sm text-muted-foreground">
-              Tu mensaje será enviado al equipo de soporte de TELDIP
-            </p>
-          </div>
-          <Button onClick={handleResponseTicket} className="w-full">
-            <Send className="mr-2 h-4 w-4" /> Responder ticket
-          </Button>
-          </>}
-        </CardContent>
-        <CardFooter>
-        </CardFooter>
-      </Card>}
+            </Table>
+
+            {idSelected && (
+              <>
+                <div className="grid w-full gap-1.5">
+                  <Label htmlFor="message-2" className="font-bold mb-2">
+                    Responder a ID: {idSelected}
+                  </Label>
+                  <Textarea
+                    placeholder="Escribe tu respuesta"
+                    value={responseTicket}
+                    onChange={(e) => setResponseTicket(e.target.value)}
+                    id="message-2"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Tu mensaje será enviado al equipo de soporte de TELDIP
+                  </p>
+                </div>
+                <Button onClick={handleResponseTicket} className="w-full">
+                  <Send className="mr-2 h-4 w-4" /> Responder ticket
+                </Button>
+              </>
+            )}
+          </CardContent>
+          <CardFooter></CardFooter>
+        </Card>
+      )}
     </motion.div>
   );
 };
