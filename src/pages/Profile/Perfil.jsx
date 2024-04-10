@@ -4,6 +4,7 @@ import {
   Send,
   FileQuestion,
   CalendarDays,
+  TextSelect
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -108,6 +109,11 @@ const Perfil = ({ className, ...props }) => {
   const { toast } = useToast();
 
   const createTicket = () => {
+    if(message.length < 19) return toast({
+      variant: "destructive",
+      title: "El mensaje es muy corto",
+      description: "Para crear un ticket, el mensaje debe tener al menos 20 caracteres",
+    })
     axios
       .post("/user/ticket", {
         userId: usuario.id,
@@ -172,6 +178,23 @@ const Perfil = ({ className, ...props }) => {
     axios.get("/user/ticket/listar").then(({ data }) => setTickets(data));
   };
 
+  const readAllNotifications = () => {
+    if(!usuario.notifications.filter(n => !n.read).length) return toast({
+      variant:"destructive",
+      duration: 2000,
+      title: "Ya todas tus notificaciones están leidas",
+    });
+    axios
+      .put("/user/notificaciones/readAll", { userId: usuario.id })
+      .then(({ data }) => {
+        setTimeout(() => updateUsuario(), 1000);
+        toast({
+          duration: 3000,
+          title: "Se han marcado todas tus notificaciones como leídas",
+        });
+      });
+  };
+
   useEffect(() => {
     getTickets();
   }, []);
@@ -187,7 +210,7 @@ const Perfil = ({ className, ...props }) => {
           <CardHeader>
             <CardTitle>Notificaciones</CardTitle>
             <CardDescription>
-              Tienes {usuario.notifications?.length} notificaciones no leídas
+              Tienes {usuario.notifications?.filter(n => !n.read).length} notificaciones no leídas
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -203,7 +226,11 @@ const Perfil = ({ className, ...props }) => {
               </div>
               <Switch />
             </div>
-            <div>
+            <div className="h-40">
+              {!usuario.notifications?.length && <div className="h-36 text-center">
+              <TextSelect className="m-auto text-gray-300 h-14 w-14 my-4" />
+              <h1 className="text-muted-foreground text-sm">No tienes notificaciones</h1>  
+              </div>}
               {usuario.notifications
                 ?.sort((a, b) => new Date(b.date) - new Date(a.date))
                 .slice(0, 2)
@@ -212,7 +239,11 @@ const Perfil = ({ className, ...props }) => {
                     key={index}
                     className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
                   >
-                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <span
+                      className={`flex h-2 w-2 translate-y-1 rounded-full ${
+                        notification.read ? "bg-gray-300" : "bg-sky-500"
+                      } `}
+                    />
                     <div className="space-y-1">
                       <p className="text-sm font-medium leading-none">
                         {notification.message}
@@ -223,10 +254,9 @@ const Perfil = ({ className, ...props }) => {
                     </div>
                   </div>
                 ))}
-            </div>
             {usuario.notifications?.length > 2 && (
               <Dialog>
-                <DialogTrigger>
+                <DialogTrigger className={"w-full"}>
                   <p className="text-sm text-center mt-2 mb-2 font-semibold b hover:underline cursor-pointer">
                     Ver más notificaciones
                   </p>
@@ -235,53 +265,60 @@ const Perfil = ({ className, ...props }) => {
                   <DialogHeader>
                     <CardTitle>Notificaciones</CardTitle>
                     <CardDescription>
-                      Tienes {usuario.notifications?.length} notificaciones no
+                      Tienes {usuario.notifications?.filter(n => !n.read).length} notificaciones no
                       leídas
                     </CardDescription>
                   </DialogHeader>
                   <div className=" flex items-center space-x-4 rounded-md border p-4">
-              <BellRing />
-              <div className="flex-1 space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Notificacion celular
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Recibir notificacion por sms
-                </p>
-              </div>
-              <Switch />
-            </div>
-            <div>
-              {usuario.notifications
-                ?.sort((a, b) => new Date(b.date) - new Date(a.date))
-                .map((notification, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-                  >
-                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-                    <div className="space-y-1">
+                    <BellRing />
+                    <div className="flex-1 space-y-1">
                       <p className="text-sm font-medium leading-none">
-                        {notification.message}
+                        Notificacion celular
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {formatDate(notification.date)}
+                        Recibir notificacion por sms
                       </p>
                     </div>
+                    <Switch />
                   </div>
-                ))}
-            </div>
-            <DialogFooter>
-            <Button className="w-full">
-              <Check className="mr-2 h-4 w-4" /> Marcar todo como leído
-            </Button>
-          </DialogFooter>
+                  <ScrollArea className="h-96">
+                    <div>
+                      {usuario.notifications
+                        ?.sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .map((notification, index) => (
+                          <div
+                            key={index}
+                            className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+                          >
+                            <span
+                              className={`flex h-2 w-2 translate-y-1 rounded-full ${
+                                notification.read ? "bg-gray-300" : "bg-sky-500"
+                              } `}
+                            />
+                            <div className="space-y-1">
+                              <p className="text-sm font-medium leading-none">
+                                {notification.message}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {formatDate(notification.date)}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                  <DialogFooter>
+                    <Button className="w-full" onClick={readAllNotifications}>
+                      <Check className="mr-2 h-4 w-4" /> Marcar todo como leído
+                    </Button>
+                  </DialogFooter>
                 </DialogContent>
               </Dialog>
             )}
+            </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full">
+            <Button className="w-full" onClick={readAllNotifications}>
               <Check className="mr-2 h-4 w-4" /> Marcar todo como leído
             </Button>
           </CardFooter>
@@ -577,7 +614,7 @@ const Perfil = ({ className, ...props }) => {
                           <HoverCardTrigger className="">
                             <Button
                               onClick={() => setIdSelected(ticket.id)}
-                              className="bg-green-300 px-2 py-1 rounded-sm font-semibold text-black hover:bg-green-400 transition-all"
+                              className="bg-red-300 px-2 py-1 rounded-sm font-semibold text-black hover:bg-red-400 transition-all"
                             >
                               Cambiar respuesta
                             </Button>
