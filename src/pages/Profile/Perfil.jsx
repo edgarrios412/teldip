@@ -152,6 +152,10 @@ const Perfil = ({ className, ...props }) => {
         },
         (e) => {
           alert(e.response.data);
+          toast({
+            duration: 3000,
+            title: e.response.data,
+          });
         }
       );
   };
@@ -224,7 +228,7 @@ const Perfil = ({ className, ...props }) => {
                   Recibir notificacion por sms
                 </p>
               </div>
-              <Switch />
+              <Switch disabled />
             </div>
             <div className="h-40">
               {!usuario.notifications?.length && <div className="h-36 text-center">
@@ -279,7 +283,7 @@ const Perfil = ({ className, ...props }) => {
                         Recibir notificacion por sms
                       </p>
                     </div>
-                    <Switch />
+                    <Switch disabled />
                   </div>
                   <ScrollArea className="h-96">
                     <div>

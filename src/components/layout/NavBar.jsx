@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { cn } from "@/lib/utils"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "./NavBar.module.css"
 // import { Icons } from "@/components/icons"
 import {
@@ -81,6 +81,7 @@ export default () => {
 
   const [open, setOpen] = useState(false)
   const [isLogged, setIsLogged] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log(isLogged)
@@ -125,13 +126,13 @@ export default () => {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Firma digital">
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => isLogged ? navigate("/perfil") : setOpen(true)} title="Firma digital">
                   API para firmar documentos de forma digital en pocos pasos
                 </ListItem>
-                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Tarjeta digital">
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => isLogged ? navigate("/perfil") : setOpen(true)} title="Tarjeta digital">
                   Servicio de identificación de vigilados a través de nuestra app
                 </ListItem>
-                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => setOpen(true)} title="Certificado medico">
+                <ListItem className={"font-[OpenSans] text-xl"} onClick={() => isLogged ? navigate("/perfil") : setOpen(true)} title="Certificado medico">
                   Genera certificados medicos válidos para tu empresa
                 </ListItem>
               </ul>

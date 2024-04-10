@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { UserContext } from "@/utils/context/User/UserContext";
+import { useToast } from "../ui/use-toast";
 
 export default ({ open, setOpen, setIsLogged }) => {
   // const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -74,6 +75,7 @@ function LoginForm({ className, setIsLogged, setLogin }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isLoader, setIsLoader] = useState(false);
+  const {toast} = useToast()
 
   const authUser = (e) => {
     e.preventDefault();
@@ -94,7 +96,11 @@ function LoginForm({ className, setIsLogged, setLogin }) {
           setIsLoader(false);
         },
         (e) => {
-          alert(e.response.data);
+          toast({
+            variant:"destructive",
+            title:e.response.data
+          })
+          // alert(e.response.data);
           setIsLoader(false);
         }
       );
@@ -164,7 +170,7 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isLoader, setIsLoader] = useState(false);
-
+  const {toast} = useToast()
   // REGISTRO
 
   const [registroEmail, setRegistroEmail] = useState("")
@@ -179,7 +185,10 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
     setIsLoader(true);
     if(registroPassword !== registroPassword2){
       setIsLoader(false)
-      return alert("Las contraseñas no coinciden");
+      return toast({
+        variant:"destructive",
+        title:"Las contraseñas no coinciden"
+      })
     }
     axios
       .post("/user", {
@@ -194,10 +203,17 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
           console.log(data);
           setLogin(true)
           setIsLoader(false);
-          alert("Usuario creado exitosamente, ya puedes ingresar")
+          toast({
+            title:"Usuario creado exitosamente",
+            description:"Ya puedes ingresar a tu cuenta"
+          })
         },
         (e) => {
-          alert(e.response.data);
+          // alert(e.response.data);
+          toast({
+            variant:"destructive",
+            title:e.response.data
+          })
           setIsLoader(false);
         }
       );
@@ -221,7 +237,11 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
           setIsLoader(false);
         },
         (e) => {
-          alert(e.response.data);
+          // alert(e.response.data);
+          toast({
+            variant:"destructive",
+            title:e.response.data
+          })
           setIsLoader(false);
         }
       );
