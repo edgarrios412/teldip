@@ -40,7 +40,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 
 import { useContext, useEffect, useState } from "react";
-import PlanCards from "@/components/ui/created/planCards";
+import PlanCards from "@/components/ui/created/PlanCards";
 import { UserContext } from "@/utils/context/User/UserContext";
 
 // GRAFICAS
