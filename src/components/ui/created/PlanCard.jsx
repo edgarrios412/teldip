@@ -20,7 +20,7 @@ const PlanCard = ({plan, color, delay}) => {
     <motion.Card initial={{y:30, opacity:0}} animate={{y:0, opacity:1}} transition={{delay:delay, duration:.3}} className="w-full flex flex-col justify-between border border-slate-200 shadow-sm rounded-lg">
       <div>
         <CardHeader className={`text-center text-white 0 ${colors[color]} rounded-t-sm`}>
-          <CardTitle className="text-lg text-black">{plan.name}</CardTitle>
+          <CardTitle className="text-lg text-black ">{plan.name}</CardTitle>
           {/* <CardDescription>
                         $499,999/mes
                       </CardDescription> */}

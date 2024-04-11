@@ -37,12 +37,80 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import axios from "axios";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PlanCards from "@/components/ui/created/planCards";
+import { UserContext } from "@/utils/context/User/UserContext";
+
+// GRAFICAS
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: true,
+      text: 'Grafico de uso de la API',
+    },
+  },
+};
+
+const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Peticiones',
+      data: [10,2,33,42,1],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+  ],
+};
 
 const Servicios = () => {
   const [serviceSelected, setServiceSelected] = useState(null);
+  const [apiKey, setApiKey] = useState(null);
+  const { usuario } = useContext(UserContext);
+
+  const generateApiKey = (serviceId, plan) => {
+    axios
+      .post("/user/service/generateKey", {
+        serviceId,
+        userId: usuario.id,
+        plan,
+      })
+      .then(({ data }) => {
+        alert("Key generada exitosamente");
+        setApiKey(data.key);
+      },(e) => alert(e.response.data));
+  };
 
   return (
     <motion.div
@@ -202,7 +270,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(1, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -213,7 +281,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(1, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -223,10 +291,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(1, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
@@ -260,7 +353,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(2, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -271,7 +364,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(2, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -281,12 +374,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(2, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
             </CardContent>
-            {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
           </Card>
         </motion.div>
       )}
@@ -319,7 +435,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(3, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -330,7 +446,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(3, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -340,12 +456,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(3, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
             </CardContent>
-            {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
           </Card>
         </motion.div>
       )}
@@ -378,7 +517,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(4, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -389,7 +528,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(4, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -399,12 +538,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(4, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
             </CardContent>
-            {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
           </Card>
         </motion.div>
       )}
@@ -437,7 +599,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(5, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -448,7 +610,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(5, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -458,12 +620,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(5, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
             </CardContent>
-            {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
           </Card>
         </motion.div>
       )}
@@ -496,7 +681,7 @@ const Servicios = () => {
                       "Hasta <b>1</b> empresa por usuario",
                       "Soporte <b>general</b>",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(6, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
@@ -507,7 +692,7 @@ const Servicios = () => {
                       "Hasta <b>50 tarjetas digitales</b> por empresa",
                       "Hasta <b>2</b> empresas por usuario",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(6, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
@@ -517,12 +702,35 @@ const Servicios = () => {
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
                     ],
-                    action: () => alert("COMPRADO"),
+                    action: () => generateApiKey(6, "PERSONALIZADO"),
                   },
                 ]}
               />
+              <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
+              <p className="text-gray-600 text-md">
+                Una vez adquirido el <b>plan</b> que necesites te otorgaremos
+                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
+                ésta <b>API KEY</b> es la que usarás para realizar las
+                peticiones a los endpoints que te proporcionamos en el apartado{" "}
+                <b>Documentación</b>
+              </p>
+              <div className="flex w-full items-center space-x-2 my-5">
+                <Input
+                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  disabled={apiKey ? false : true}
+                  className="w-96"
+                  type="email"
+                  placeholder="Email"
+                />
+                <Button
+                  disabled={apiKey ? false : true}
+                  type="submit"
+                  className="bg-black font-bold"
+                >
+                  Copiar API KEY
+                </Button>
+              </div>
             </CardContent>
-            {/* <h2 className="font-bold p-3.5">Historial de pagos</h2> */}
           </Card>
         </motion.div>
       )}
