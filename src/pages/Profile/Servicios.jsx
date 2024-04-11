@@ -83,23 +83,24 @@ const options = {
 
 const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Peticiones',
-      data: [10,2,33,42,1],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
 
 const Servicios = () => {
   const [serviceSelected, setServiceSelected] = useState(null);
   const [apiKey, setApiKey] = useState(null);
   const { usuario, updateUsuario } = useContext(UserContext);
   const {toast} = useToast()
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Peticiones',
+        data: [apiKey?.usage],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
 
   useEffect(() => {
     if(serviceSelected != null){
@@ -435,6 +436,7 @@ const Servicios = () => {
                 {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
                 {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
@@ -521,6 +523,7 @@ const Servicios = () => {
                 {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
                 {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
@@ -607,6 +610,7 @@ const Servicios = () => {
                 {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
                 {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
@@ -693,6 +697,7 @@ const Servicios = () => {
                 {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
                 {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
@@ -779,6 +784,7 @@ const Servicios = () => {
                 {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
                 {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
+              {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
           </Card>
         </motion.div>
