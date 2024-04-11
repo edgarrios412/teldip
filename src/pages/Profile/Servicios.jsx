@@ -39,7 +39,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PlanCards from "@/components/ui/created/planCards";
 import { UserContext } from "@/utils/context/User/UserContext";
 
@@ -56,6 +56,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { useToast } from "@/components/ui/use-toast";
 
 ChartJS.register(
   CategoryScale,
@@ -97,7 +98,15 @@ export const data = {
 const Servicios = () => {
   const [serviceSelected, setServiceSelected] = useState(null);
   const [apiKey, setApiKey] = useState(null);
-  const { usuario } = useContext(UserContext);
+  const { usuario, updateUsuario } = useContext(UserContext);
+  const {toast} = useToast()
+
+  useEffect(() => {
+    if(serviceSelected != null){
+      console.log(usuario)
+      setApiKey(usuario.apikeys.find(api => api.serviceId == serviceSelected))
+    }
+  },[serviceSelected])
 
   const generateApiKey = (serviceId, plan) => {
     axios
@@ -107,10 +116,26 @@ const Servicios = () => {
         plan,
       })
       .then(({ data }) => {
-        alert("Key generada exitosamente");
-        setApiKey(data.key);
-      },(e) => alert(e.response.data));
+        toast({
+          title:"Tu API KEY fue generada exitosamente",
+          description:"Desliza hacia abajo la pantalla puedes copiar tu API KEY para empezar a utilizarla"
+        })
+        setApiKey(data);
+        updateUsuario()
+      },(e) => toast({
+        variant:"destructive",
+        title:"Ha ocurrido un problema",
+        description:e.response.data
+      }));
   };
+
+  const copyApiToClipboard = () => {
+    navigator.clipboard.writeText(apiKey?.key);
+    toast({
+      title:"Texto copiado exitosamente",
+      description:"Tu API KEY se encuentra almacenada en tu portapales"
+    })
+ };
 
   return (
     <motion.div
@@ -305,7 +330,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -315,9 +340,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
               {apiKey && <Line className="mt-10" options={options} data={data} />}
             </CardContent>
@@ -388,7 +417,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -398,9 +427,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
             </CardContent>
           </Card>
@@ -470,7 +503,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -480,9 +513,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
             </CardContent>
           </Card>
@@ -552,7 +589,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -562,9 +599,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
             </CardContent>
           </Card>
@@ -634,7 +675,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -644,9 +685,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
             </CardContent>
           </Card>
@@ -716,7 +761,7 @@ const Servicios = () => {
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
-                  value={apiKey ?? "XXXX-XXXX-XXXX-XXXXX"}
+                  value={apiKey?.key ?? "XXXX-XXXX-XXXX-XXXXX"}
                   disabled={apiKey ? false : true}
                   className="w-96"
                   type="email"
@@ -726,9 +771,13 @@ const Servicios = () => {
                   disabled={apiKey ? false : true}
                   type="submit"
                   className="bg-black font-bold"
+                  onClick={() => copyApiToClipboard()}
                 >
                   Copiar API KEY
                 </Button>
+                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
+                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
+                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
               </div>
             </CardContent>
           </Card>
