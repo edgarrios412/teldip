@@ -161,6 +161,13 @@ export default () => {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link to="/politicas">
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Politicas
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
         </NavigationMenuList>
         {!isLogged ?
           <ModalLogin open={open} setIsLogged={setIsLogged} setOpen={setOpen} /> :

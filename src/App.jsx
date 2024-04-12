@@ -8,6 +8,7 @@ import NavBar from "./components/layout/NavBar";
 import { useContext, useEffect } from "react";
 import axios from "axios"
 import { UserContext } from "./utils/context/User/UserContext";
+import Politicas from "./pages/Politicas/Politicas";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Inicio />} />
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/contacto" element={<ContactUs />} />
+        <Route path="/politicas" element={<Politicas />} />
         <Route path="/perfil" element={<Profile />} />
         <Route path="/datos/:cedula" element={<Datos />} />
 

@@ -181,11 +181,11 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
   const [registroPassword2, setRegistroPassword2] = useState("")
 
   const passReg = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+  const emailReg = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
   const registerUser = (e) => {
     e.preventDefault();
     setIsLoader(true);
-    3118268264
     if(registroTelefono.length != 10){
       setIsLoader(false)
       return toast({
@@ -200,6 +200,13 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
         title:"Las contraseñas no coinciden"
       })
     }
+    if(!emailReg.test(registroEmail)){
+      setIsLoader(false)
+      return toast({
+        variant:"destructive",
+        title:"El correo electrónico introducido no es válido"
+      })
+    }
     if(!passReg.test(registroPassword)){
       setIsLoader(false)
       return toast({
@@ -209,10 +216,10 @@ function RegisterForm({ className, setIsLogged, setLogin }) {
     }
     axios
       .post("/user", {
-        name:registroNombres.toUpperCase(),
-        lastname:registroApellidos.toUpperCase(),
-        phone:registroTelefono,
-        email:registroEmail,
+        name:registroNombres.toUpperCase().trim(),
+        lastname:registroApellidos.toUpperCase().trim(),
+        phone:registroTelefono.trim(),
+        email:registroEmail.trim(),
         password:registroPassword,
       })
       .then(
