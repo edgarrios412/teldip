@@ -52,6 +52,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/utils/context/User/UserContext";
 import axios from "axios";
+import  {NumericFormat} from "react-number-format";
 
 const invoices = [
   {
@@ -109,15 +110,19 @@ const Pagos = () => {
 
   const pagarAhora = () => {
     const reference = new Date().getTime().toString();
+    console.log(reference)
     setOpen(false);
     var checkout = new WidgetCheckout({
       currency: "COP",
       amountInCents: monto + "00",
       reference: reference,
       publicKey: "pub_test_w28dxS2v9clmkb8UbFrlkw3GxBUx3bsq",
+      redirectUrl: 'http://localhost:5173/perfil'
     });
+    console.log(checkout)
     checkout.open(function (result) {
       var transaction = result.transaction;
+      console.log(result)
       if (transaction.status == "APPROVED") {
         axios
           .post("/user/historial", {
@@ -141,7 +146,7 @@ const Pagos = () => {
   };
 
   return (
-    <motion.div initial={{opacity:0}} animate={{opacity:1}} className="bg-gray-100 font-[OpenSans] px-20 py-10">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-gray-100 font-[OpenSans] px-20 py-10">
       <Card className="font-[OpenSans] px-10 py-5">
         <div className="p-3.5 flex justify-between">
           <div>
@@ -162,25 +167,29 @@ const Pagos = () => {
                     <SheetDescription className={"font-[OpenSans] px-1"}>
                       <div className="grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="email">Monto a recargar</Label>
-                        <Input
-                          type="number"
-                          id="email"
+                        <NumericFormat
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                           value={monto}
-                          onChange={(e) => setMonto(e.target.value)}
+                          onValueChange={(values) => {
+                            console.log(values)
+                            const { value } = values;
+                            setMonto(value);
+                          }}
+                          thousandSeparator={true}
+                          isNumericString={true}
+                          prefix={'$'}
                           placeholder="Cantidad"
                         />
                       </div>
 
-                      <Select className="w-full font-[OpenSans]">
+                      {/* <Select className="w-full font-[OpenSans]">
                         <SelectTrigger className="w-full text-left h-fit my-4">
                           <SelectValue placeholder="Metodo de pago" />
                         </SelectTrigger>
                         <SelectContent className="font-[OpenSans]">
                           <SelectGroup>
-                            {/* <SelectLabel>Fruits</SelectLabel> */}
                             <SelectItem value="apple">
                               <div className=" transition-all cursor-pointer flex items-center space-x-4 p-4">
-                                {/* <QrCode /> */}
                                 <img src={mastercard} className="w-10" />
                                 <div className="flex-1 space-y-1">
                                   <p className="text-sm font-bold leading-none">
@@ -194,7 +203,6 @@ const Pagos = () => {
                             </SelectItem>
                             <SelectItem value="banana">
                               <div className="transition-all cursor-pointer flex items-center space-x-4 p-4">
-                                {/* <QrCode /> */}
                                 <img src={paypal} className="w-10" />
                                 <div className="flex-1 space-y-1">
                                   <p className="text-sm font-bold leading-none">
@@ -206,13 +214,10 @@ const Pagos = () => {
                                 </div>
                               </div>
                             </SelectItem>
-                            {/* <SelectItem value="blueberry">Blueberry</SelectItem>
-                            <SelectItem value="grapes">Grapes</SelectItem>
-                            <SelectItem value="pineapple">Pineapple</SelectItem> */}
                           </SelectGroup>
                         </SelectContent>
-                      </Select>
-                      <Button className="w-full" onClick={pagarAhora}>
+                      </Select> */}
+                      <Button className="w-full mt-5" onClick={pagarAhora}>
                         <CreditCard className="mx-2 w-5" />
                         Pagar ahora
                       </Button>
@@ -227,11 +232,10 @@ const Pagos = () => {
           Evita que tus servicios sean suspendidos, mantén siempre tu cuenta con
           saldo positivo
         </p>
-        <div className="p-3.5">
+        {/* <div className="p-3.5">
           <h2 className="font-bold py-3">Metodos de pagos</h2>
           <div className="flex flex-col gap-4">
             <div className="hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer flex items-center space-x-4 rounded-md border p-4">
-              {/* <QrCode /> */}
               <img src={mastercard} className="w-10" />
               <div className="flex-1 space-y-1">
                 <p className="text-sm font-bold leading-none">
@@ -246,7 +250,6 @@ const Pagos = () => {
               </Button>
             </div>
             <div className="hover:border-gray-200 hover:bg-gray-50 transition-all cursor-pointer flex items-center space-x-4 rounded-md border p-4">
-              {/* <QrCode /> */}
               <img src={paypal} className="w-10" />
               <div className="flex-1 space-y-1">
                 <p className="text-sm font-bold leading-none">
@@ -261,7 +264,7 @@ const Pagos = () => {
               </Button>
             </div>
           </div>
-        </div>
+        </div> */}
         <h2 className="font-bold p-3.5">Historial de pagos</h2>
         <Table>
           <TableCaption>Estos son tus ultimos pagos</TableCaption>
