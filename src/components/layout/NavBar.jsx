@@ -164,7 +164,7 @@ export default () => {
           <NavigationMenuItem>
             <Link to="/politicas">
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Politicas
+                Políticas
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
