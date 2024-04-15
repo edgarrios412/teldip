@@ -54,8 +54,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 import { useToast } from "@/components/ui/use-toast";
 
 ChartJS.register(
@@ -72,42 +72,57 @@ const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
     title: {
       display: true,
-      text: 'Grafico de uso de la API',
+      text: "Grafico de uso de la API",
     },
   },
 };
 
-const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-
+const labels = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
 
 const Servicios = () => {
   const [serviceSelected, setServiceSelected] = useState(null);
   const [apiKey, setApiKey] = useState(null);
+  const [file, setFile] = useState(null)
   const { usuario, updateUsuario } = useContext(UserContext);
-  const {toast} = useToast()
+  const { toast } = useToast();
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Peticiones',
+        label: "Peticiones",
         data: [apiKey?.usage],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
   };
 
   useEffect(() => {
-    if(serviceSelected != null){
-      console.log(usuario)
-      setApiKey(usuario.apikeys.find(api => api.serviceId == serviceSelected))
+    if (serviceSelected != null) {
+      console.log(usuario);
+      setApiKey(
+        usuario.apikeys.find((api) => api.serviceId == serviceSelected)
+      );
     }
-  },[serviceSelected])
+  }, [serviceSelected]);
 
   const generateApiKey = (serviceId, plan) => {
     axios
@@ -116,27 +131,47 @@ const Servicios = () => {
         userId: usuario.id,
         plan,
       })
-      .then(({ data }) => {
-        toast({
-          title:"Tu API KEY fue generada exitosamente",
-          description:"Desliza hacia abajo la pantalla puedes copiar tu API KEY para empezar a utilizarla"
-        })
-        setApiKey(data);
-        updateUsuario()
-      },(e) => toast({
-        variant:"destructive",
-        title:"Ha ocurrido un problema",
-        description:e.response.data
-      }));
+      .then(
+        ({ data }) => {
+          toast({
+            title: "Tu API KEY fue generada exitosamente",
+            description:
+              "Desliza hacia abajo la pantalla puedes copiar tu API KEY para empezar a utilizarla",
+          });
+          setApiKey(data);
+          updateUsuario();
+        },
+        (e) =>
+          toast({
+            variant: "destructive",
+            title: "Ha ocurrido un problema",
+            description: e.response.data,
+          })
+      );
   };
 
   const copyApiToClipboard = () => {
     navigator.clipboard.writeText(apiKey?.key);
     toast({
-      title:"Texto copiado exitosamente",
-      description:"Tu API KEY se encuentra almacenada en tu portapales"
-    })
- };
+      title: "Texto copiado exitosamente",
+      description: "Tu API KEY se encuentra almacenada en tu portapales",
+    });
+  };
+
+  const createMasiveUsers = () => {
+    console.log(file)
+    const form = new FormData()
+    form.append("file",file)
+    axios.post("/file/excelToJson/createUsers",form, {headers:{Authorization:apiKey.key}})
+    .then(({data}) => toast({
+      title: "Usuarios creados exitosamente",
+      description: data,
+    }),(e) => toast({
+      variant: "destructive",
+      title: "Ha ocurrido un problema",
+      description: e.response.data,
+    }))
+  }
 
   return (
     <motion.div
@@ -289,33 +324,37 @@ const Servicios = () => {
                 plans={[
                   {
                     name: "BASICO",
-                    price: "199,999",
+                    price: "59,999",
                     periodFact: "mes",
                     benefits: [
-                      "Hasta <b>25 tarjetas digitales</b> por empresa",
-                      "Hasta <b>1</b> empresa por usuario",
-                      "Soporte <b>general</b>",
+                      "Hasta <b>100</b> códigos QR dinámicos",
+                      "<b>100.000</b> escaneos al mes",
+                      "Creación <b>masiva</b> de códigos QR",
                     ],
                     action: () => generateApiKey(1, "BASICO"),
                   },
                   {
                     name: "PROFESIONAL",
-                    price: "499,999",
+                    price: "159,999",
                     periodFact: "mes",
                     benefits: [
                       "Todos los beneficios del plan <b>básico</b>",
-                      "Hasta <b>50 tarjetas digitales</b> por empresa",
-                      "Hasta <b>2</b> empresas por usuario",
+                      "Hasta <b>1.000</b> códigos QR dinámicos",
+                      "Escaneos <b>ilimitados</b>",
+                      "Diseño avanzado y plantillas"
                     ],
                     action: () => generateApiKey(1, "PROFESIONAL"),
                   },
                   {
                     name: "PERSONALIZADO",
+                    price: "399,999",
+                    periodFact: "mes",
                     benefits: [
                       "Todos los beneficios del plan <b>profesional</b>",
-                      "<b>+100 tarjetas digitales</b> por empresa",
+                      "Más de <b>1.000</b> códigos QR dinámicos",
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
+                      "Acceso <b>API</b>"
                     ],
                     action: () => generateApiKey(1, "PERSONALIZADO"),
                   },
@@ -324,10 +363,9 @@ const Servicios = () => {
               <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
               <p className="text-gray-600 text-md">
                 Una vez adquirido el <b>plan</b> que necesites te otorgaremos
-                una <b>API KEY</b> que se verá reflejada debajo de éste texto,
-                ésta <b>API KEY</b> es la que usarás para realizar las
-                peticiones a los endpoints que te proporcionamos en el apartado{" "}
-                <b>Documentación</b>
+                cierta cantidad de <b>códigos QR</b> dependiendo del plan que hayas adquirido,
+                y podrás empezar a registrar a tus <b>empleados</b> puedes hacerlo uno a uno o realizando
+                una <b>carga masiva a través de un excel</b>
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
@@ -345,11 +383,42 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <>
+                  {apiKey?.plan == "BASICO" && (
+                    <b>Uso {apiKey.usage}/100</b>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                    <b>Uso {apiKey.usage}/1,000</b>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                    <b>Uso {apiKey.usage}/Ilimitado</b>
+                )}
+                  <h3 className="font-bold mt-8 mb-3">
+                    Cargar usuarios de forma masiva
+                  </h3>
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Input onChange={(e) => setFile(e.target.files[0])} id="picture" type="file" />
+                    <Button onClick={createMasiveUsers}>Subir</Button>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -432,11 +501,25 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <Line className="mt-10" options={options} data={data} />
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -519,11 +602,25 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <Line className="mt-10" options={options} data={data} />
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -606,11 +703,25 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <Line className="mt-10" options={options} data={data} />
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -693,11 +804,25 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <Line className="mt-10" options={options} data={data} />
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -780,11 +905,25 @@ const Servicios = () => {
                 >
                   Copiar API KEY
                 </Button>
-                {apiKey?.plan == "BASICO" &&<div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">BASICO</div>}
-                {apiKey?.plan == "PROFESIONAL" &&<div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">PROFESIONAL</div>}
-                {apiKey?.plan == "PERSONALIZADO" &&<div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">PERSONALIZADO</div>}
+                {apiKey?.plan == "BASICO" && (
+                  <div className="bg-gradient-to-r from-blue-200 to-cyan-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    BASICO
+                  </div>
+                )}
+                {apiKey?.plan == "PROFESIONAL" && (
+                  <div className="bg-gradient-to-r from-violet-200 to-pink-200 font-bold px-3 py-2 rounded-md cursor-default">
+                    PROFESIONAL
+                  </div>
+                )}
+                {apiKey?.plan == "PERSONALIZADO" && (
+                  <div className="bg-gradient-to-r from-orange-300 to-amber-300 font-bold px-3 py-2 rounded-md cursor-default">
+                    PERSONALIZADO
+                  </div>
+                )}
               </div>
-              {apiKey && <Line className="mt-10" options={options} data={data} />}
+              {apiKey && (
+                <Line className="mt-10" options={options} data={data} />
+              )}
             </CardContent>
           </Card>
         </motion.div>

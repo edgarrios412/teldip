@@ -46,6 +46,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.2",
     "react-number-format": "^5.3.4",
+    "react-qr-code": "^2.0.12",
     "react-resizable-panels": "^2.0.16",
     "react-router-dom": "^6.21.3",
     "tailwind-merge": "^2.2.1",

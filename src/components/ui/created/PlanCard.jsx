@@ -38,7 +38,7 @@ const PlanCard = ({plan, color, delay}) => {
             </div>
           )}
           <h3 className="font-bold my-4">Beneficios</h3>
-          <div className="flex flex-col gap-3 text-gray-600">
+          <div className="flex flex-col gap-3 text-gray-800">
             {plan?.benefits?.map(b => <p className="flex gap-2">
               <Check className="min-w-3.5 max-w-3.5" />
               <span className="text-sm" dangerouslySetInnerHTML={{ __html: b }}>

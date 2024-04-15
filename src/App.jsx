@@ -9,6 +9,7 @@ import { useContext, useEffect } from "react";
 import axios from "axios"
 import { UserContext } from "./utils/context/User/UserContext";
 import Politicas from "./pages/Politicas/Politicas";
+import QRs from "./pages/QRs";
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/servicios" element={<Servicios />} />
         <Route path="/contacto" element={<ContactUs />} />
         <Route path="/politicas" element={<Politicas />} />
+        <Route path="/qr/:serial" element={<QRs />} />
         <Route path="/perfil" element={<Profile />} />
         <Route path="/datos/:cedula" element={<Datos />} />
 
