@@ -20,6 +20,7 @@ const QRs = () => {
       }
     );
   }, []);
+
   return (
     <div className="bg-gray-100 h-full absolute w-full font-[OpenSans]">
       {loader ? (
@@ -77,7 +78,7 @@ const QRs = () => {
               </div>
             </div>
             <div className="m-auto">
-              <h4 className="font-bold text-sm">Número de certficación</h4>
+              <h4 className="font-bold text-sm">Número de certificación</h4>
               <h4 className="mb-4 text-sm">{usuario.certificacion}</h4>
             </div>
             <QRCode
