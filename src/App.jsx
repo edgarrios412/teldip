@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-      {location.pathname != "/perfil" && <NavBar/>}
+      {(location.pathname != "/perfil" && !location.pathname.includes("/qr")) && <NavBar/>}
       <Routes>
         <Route path="/" element={<Inicio />} />
         <Route path="/servicios" element={<Servicios />} />
