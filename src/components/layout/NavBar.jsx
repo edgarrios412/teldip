@@ -48,6 +48,7 @@ import {
   UserPlus,
   Users,
 } from "lucide-react"
+import { UserContext } from "@/utils/context/User/UserContext";
 
 
 const components = [
@@ -78,7 +79,7 @@ const components = [
 
 export default () => {
 
-
+  const {usuario} = useContext(UserContext)
   const [open, setOpen] = useState(false)
   const [isLogged, setIsLogged] = useState(false)
   const navigate = useNavigate()
@@ -174,7 +175,7 @@ export default () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar role="button">
-                <AvatarImage className="bg-white" src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png" />
+                <AvatarImage className="bg-white" src={`https://back-teldip.onrender.com/uploads/${usuario.image}`} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

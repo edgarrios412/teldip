@@ -11,13 +11,13 @@ const QRs = () => {
       ({ data }) => setUsuario(data),
       () => setUsuario(null)
     );
-  });
+  },[]);
   return (
     <div className="bg-gray-100 h-full absolute w-full font-[OpenSans]">
       {usuario ? (
-        <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-32 p-6">
+        <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
           <img
-            src="https://f.rpp-noticias.io/2019/02/15/753296descarga-7jpg.jpg"
+            src={`https://back-teldip.onrender.com/uploads/${usuario.image}`}
             className="rounded-full w-24 h-24 bg-green-300 m-auto"
           ></img>
           <div className="text-center mt-3">

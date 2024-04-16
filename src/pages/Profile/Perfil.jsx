@@ -5,6 +5,8 @@ import {
   FileQuestion,
   CalendarDays,
   TextSelect,
+  X,
+  Save,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -99,6 +101,7 @@ const notifications = [
 ];
 
 const Perfil = ({ className, ...props }) => {
+  const { usuario, updateUsuario } = useContext(UserContext);
   const [message, setMessage] = useState("");
   const [tickets, setTickets] = useState([]);
   const [responseTicket, setResponseTicket] = useState("");
@@ -106,8 +109,42 @@ const Perfil = ({ className, ...props }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
-  const { usuario, updateUsuario } = useContext(UserContext);
+  const [documento, setDocumento] = useState(usuario?.documento);
+  const [image, setImage] = useState(null);
+  const [urlImage, setUrlImage] = useState(null);
+  const [certificacion, setCertificacion] = useState(usuario?.certificacion);
   const { toast } = useToast();
+
+  const editUser = () => {
+    console.log(image)
+    if (image) {
+      const form = new FormData();
+      form.append("file", image);
+      axios
+        .post("https://back-teldip.onrender.com/file/image/upload", form)
+        .then(({ data }) => {
+          axios
+            .put("/user", { id: usuario.id, documento, certificacion, image:data.split("/")[1] })
+            .then(() => {
+              updateUsuario();
+              toast({
+                title: "Datos actualizados",
+                description: "Los datos han sido actualizados exitosamente",
+              });
+            });
+        });
+    }else{
+      axios
+        .put("/user", { id: usuario.id, documento, certificacion })
+        .then(() => {
+          updateUsuario();
+          toast({
+            title: "Datos actualizados",
+            description: "Los datos han sido actualizados exitosamente",
+          });
+        });
+    }
+  };
 
   const createTicket = () => {
     if (message.length < 19)
@@ -221,12 +258,116 @@ const Perfil = ({ className, ...props }) => {
       animate={{ opacity: 1 }}
       className="bg-gray-100 font-[OpenSans] px-20 py-10"
     >
-        {usuario?.serial && <QRCode
-          size={256}
-          // style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-          value={"https://teldip.com/qr/"+usuario.serial}
-          viewBox={`0 0 256 256`}
-        />}
+      {usuario?.serial && (
+        <Card className="w-full mb-10 flex bg-white">
+          <QRCode
+            size={256}
+            className="p-10"
+            // style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+            value={"https://teldip.com/qr/" + usuario.serial}
+            viewBox={`0 0 256 256`}
+          />
+          <div className="mt-12">
+            <p className="font-bold pr-20">
+              Esta es tu tarjeta digital generada por tu empresa, para que ésta
+              tarjeta sea válida debes hacer lo siguiente
+            </p>
+            {usuario.image ? (
+              <p className="mt-4 flex items-center gap-2 text-green-500 font-semibold text-sm">
+                <Check className="w-4 h-4" /> Debes subir una foto de perfil
+              </p>
+            ) : (
+              <p className="mt-4 flex items-center gap-2 text-red-600 font-semibold text-sm">
+                <X className="w-4 h-4" /> Debes subir una foto de perfil
+              </p>
+            )}
+            {usuario.certificacion && usuario.documento ? (
+              <p className="mt-2 flex items-center gap-2 text-green-500 font-semibold text-sm">
+                <Check className="w-4 h-4" /> Debes llenar tus datos personales
+              </p>
+            ) : (
+              <p className="mt-2 flex items-center gap-2 text-red-600 font-semibold text-sm">
+                <X className="w-4 h-4" /> Debes llenar tus datos personales
+              </p>
+            )}
+            {(!usuario.certificacion ||
+              !usuario.documento ||
+              !usuario.image) && (
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="mt-4 h-7 bg-black">Realizar</Button>
+                </DialogTrigger>
+                <DialogContent className="font-[OpenSans]">
+                  <DialogHeader>
+                    <CardTitle>Completa la información</CardTitle>
+                    <CardDescription>
+                      Debes completar la información para que tu tarjeta digital
+                      sea válida
+                    </CardDescription>
+                  </DialogHeader>
+                  {/* <div className=" flex items-center space-x-4 rounded-md border p-4">
+                  <BellRing />
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      Notificacion celular
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Recibir notificacion por sms
+                    </p>
+                  </div>
+                  <Switch disabled />
+                </div> */}
+                  <form
+                    onSubmit={() => alert("Subiendo data")}
+                    className={cn("grid h-fit items-start gap-4", className)}
+                  >
+                    {!usuario.image && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Foto de perfil</Label>
+                        <Input
+                          className={"font-[OpenSans] text-sm"}
+                          onChange={(e) => setImage(e.target.files[0])}
+                          type="file"
+                          id="email"
+                        />
+                      </div>
+                    )}
+                    {!usuario.documento && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Documento</Label>
+                        <Input
+                          className={"font-[OpenSans] text-sm"}
+                          onChange={(e) => setDocumento(e.target.value)}
+                          type="email"
+                          id="email"
+                          value={documento}
+                        />
+                      </div>
+                    )}
+                    {!usuario.certificacion && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Número de certificación</Label>
+                        <Input
+                          className={"font-[OpenSans] text-sm"}
+                          onChange={(e) => setCertificacion(e.target.value)}
+                          type="email"
+                          id="email"
+                          value={certificacion}
+                        />
+                      </div>
+                    )}
+                  </form>
+                  <DialogFooter>
+                    <Button className="w-full" onClick={editUser}>
+                      <Save className="mr-2 h-4 w-4" /> Guardar datos
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
+        </Card>
+      )}
       <div className="flex gap-10">
         <Card className={cn("w-1/3", className)} {...props}>
           <CardHeader>
@@ -611,7 +752,7 @@ const Perfil = ({ className, ...props }) => {
                         <HoverCardContent className="w-80" side="top">
                           <div className="flex justify-between space-x-4">
                             <Avatar>
-                              <AvatarImage src="https://github.com/vercel.png" />
+                              <AvatarImage src={`https://back-teldip.onrender.com/uploads/${usuario.image}`} />
                               <AvatarFallback>VC</AvatarFallback>
                             </Avatar>
                             <div className="space-y-1">
