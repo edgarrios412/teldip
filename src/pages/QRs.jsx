@@ -50,7 +50,7 @@ const QRs = () => {
       ) : usuario ? (
         <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
           <img
-            src={`https://back-teldip.onrender.com/uploads/${usuario.image}`}
+            src={usuario.image ? `https://back-teldip.onrender.com/uploads/${usuario.image}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
             className="rounded-full w-24 h-24 bg-gray-200 m-auto"
           ></img>
           <div className="text-center mt-3">
