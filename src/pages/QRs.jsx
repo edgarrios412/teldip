@@ -49,7 +49,7 @@ const QRs = () => {
           </p>
         </div>
       ) : usuario ? (
-        <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
+        (usuario.image && usuario.certificacion && usuario.documento) ? <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
           <img
             src={usuario.image ? `https://back-teldip.onrender.com/uploads/${usuario.image}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
             className="rounded-full w-24 h-24 bg-gray-200 m-auto"
@@ -89,6 +89,11 @@ const QRs = () => {
               viewBox={`0 0 256 256`}
             />
           </div>
+        </div> : <div className="flex flex-col items-center m-auto mt-60">
+          <Contact className="w-14 h-14 text-gray-900" />
+          <p className="font-bold mt-4 text-xl text-black">
+            Tarjeta en proceso de validación
+          </p>
         </div>
       ) : (
         <div className="flex flex-col items-center m-auto mt-60">
