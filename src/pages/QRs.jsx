@@ -49,16 +49,20 @@ const QRs = () => {
           </p>
         </div>
       ) : usuario ? (
-        (usuario.image && usuario.certificacion && usuario.documento) ? <div className="border-2 h-[520px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
+        (usuario.image && usuario.certificacion && usuario.documento) ? <div className="border-2 h-[580px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
+          <img
+            src={usuario.company.logo ? `https://teldip.com/uploads/${usuario.company.logo}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
+            className="h-10 my-4 m-auto"
+          ></img>
           <img
             src={usuario.image ? `https://back-teldip.onrender.com/uploads/${usuario.image}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
-            className="rounded-full w-24 h-24 bg-gray-200 m-auto"
+            className="border-2 border-gray-300 rounded-full w-24 h-24 bg-gray-200 m-auto"
           ></img>
           <div className="text-center mt-3">
             <h2 className="text-xl font-bold px-10">
               {usuario.name} {usuario.lastname}
             </h2>
-            <h3 className=" text-gray-400 text-sm">Cargo actual</h3>
+            {/* <h3 className=" text-gray-400 text-sm">Cargo actual</h3> */}
             <div className="text-left mt-4 grid grid-cols-2">
               <div className="ml-6">
                 <h4 className="font-bold text-sm">Documento</h4>

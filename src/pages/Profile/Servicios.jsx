@@ -15,6 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import {
   QrCode,
@@ -99,9 +108,55 @@ const labels = [
 const Servicios = () => {
   const [serviceSelected, setServiceSelected] = useState(null);
   const [apiKey, setApiKey] = useState(null);
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(null);
+  const [name, setName] = useState("")
+  const [lastname, setLastname] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [phone, setPhone] = useState("")
+
+  const [direccionCompany, setDireccionCompany] = useState("")
+  const [nitCompany, setNitCompany] = useState("")
+  const [nameCompany, setNameCompany] = useState("")
+  const [imgLogo, setImgLogo] = useState("")
+
   const { usuario, updateUsuario } = useContext(UserContext);
   const { toast } = useToast();
+
+  const createCompany = () => {
+    const form = new FormData()
+    form.append("file",imgLogo)
+    axios.post("/file/image/upload",form).then(({data}) => {
+      axios.post("/company", {logo:data.split("\\")[1] ,direccion: direccionCompany, nit: nitCompany, nombre:nameCompany, owner: usuario.id})
+      .then(() => {toast({
+        title:"Empresa registrada exitosamente",
+      });
+      updateUsuario()
+    }, (e) => toast({
+        variant:"destructive",
+        title:"Ha ocurrido un error",
+        description:e.response.data
+      }))
+    })
+  }
+
+  const createByUser = () => {
+    if(usuario?.micompany == null) return toast({
+      variant:"destructive",
+      title:"Ha ocurrido un error",
+      description:"No tienes ninguna empresa registrada"
+    })
+
+    axios.post("/user/createByUser", {name,lastname,email,password,phone,companyId:usuario.micompany.id}, {headers:{Authorization:apiKey?.key}})
+    .then(() => toast({
+      title:"Usuario creado exitosamente",
+      description:"Se envió un correo al usuario con su tarjeta digital"
+    }), (e) => toast({
+      variant:"destructive",
+      title:"Ha ocurrido un error",
+      description:e.response.data
+    }))
+  }
 
   const data = {
     labels,
@@ -159,19 +214,28 @@ const Servicios = () => {
   };
 
   const createMasiveUsers = () => {
-    console.log(file)
-    const form = new FormData()
-    form.append("file",file)
-    axios.post("/file/excelToJson/createUsers",form, {headers:{Authorization:apiKey.key}})
-    .then(({data}) => toast({
-      title: "Usuarios creados exitosamente",
-      description: data,
-    }),(e) => toast({
-      variant: "destructive",
-      title: "Ha ocurrido un problema",
-      description: e.response.data,
-    }))
-  }
+    console.log(file);
+    const form = new FormData();
+    form.append("file", file);
+    form.append("companyId",usuario.micompany.id)
+    axios
+      .post("/file/excelToJson/createUsers", form, {
+        headers: { Authorization: apiKey.key },
+      })
+      .then(
+        ({ data }) =>
+          toast({
+            title: "Usuarios creados exitosamente",
+            description: data,
+          }),
+        (e) =>
+          toast({
+            variant: "destructive",
+            title: "Ha ocurrido un problema",
+            description: e.response.data,
+          })
+      );
+  };
 
   return (
     <motion.div
@@ -341,7 +405,7 @@ const Servicios = () => {
                       "Todos los beneficios del plan <b>básico</b>",
                       "Hasta <b>1.000</b> códigos QR dinámicos",
                       "Escaneos <b>ilimitados</b>",
-                      "Diseño avanzado y plantillas"
+                      "Diseño avanzado y plantillas",
                     ],
                     action: () => generateApiKey(1, "PROFESIONAL"),
                   },
@@ -354,7 +418,7 @@ const Servicios = () => {
                       "Más de <b>1.000</b> códigos QR dinámicos",
                       "Asesoria <b>personalizada</b> para la empresa",
                       "Soporte <b>personalizado</b> para la empresa",
-                      "Acceso <b>API</b>"
+                      "Acceso <b>API</b>",
                     ],
                     action: () => generateApiKey(1, "PERSONALIZADO"),
                   },
@@ -363,9 +427,10 @@ const Servicios = () => {
               <h3 className="font-bold mt-8 mb-3">¿Como usar el servicio?</h3>
               <p className="text-gray-600 text-md">
                 Una vez adquirido el <b>plan</b> que necesites te otorgaremos
-                cierta cantidad de <b>códigos QR</b> dependiendo del plan que hayas adquirido,
-                y podrás empezar a registrar a tus <b>empleados</b> puedes hacerlo uno a uno o realizando
-                una <b>carga masiva a través de un excel</b>
+                cierta cantidad de <b>códigos QR</b> dependiendo del plan que
+                hayas adquirido, y podrás empezar a registrar a tus{" "}
+                <b>empleados</b> puedes hacerlo uno a uno o realizando una{" "}
+                <b>carga masiva a través de un excel</b>
               </p>
               <div className="flex w-full items-center space-x-2 my-5">
                 <Input
@@ -401,22 +466,177 @@ const Servicios = () => {
               </div>
               {apiKey && (
                 <>
-                  {apiKey?.plan == "BASICO" && (
-                    <b>Uso {apiKey.usage}/100</b>
-                )}
-                {apiKey?.plan == "PROFESIONAL" && (
+                  {apiKey?.plan == "BASICO" && <b>Uso {apiKey.usage}/100</b>}
+                  {apiKey?.plan == "PROFESIONAL" && (
                     <b>Uso {apiKey.usage}/1,000</b>
-                )}
-                {apiKey?.plan == "PERSONALIZADO" && (
+                  )}
+                  {apiKey?.plan == "PERSONALIZADO" && (
                     <b>Uso {apiKey.usage}/Ilimitado</b>
-                )}
+                  )}
+                  <br></br>
+                  <br></br>
+                  {usuario?.micompany == null && <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>Registrar empresa</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Ingresa los datos</DialogTitle>
+                        <DialogDescription
+                          className={"font-[OpenSans] text-sm mb-6"}
+                        >
+                          Ingresa los datos del usuario para generar la tarjeta
+                          digital
+                        </DialogDescription>
+                        <div className="flex flex-col pt-3 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Logo de la empresa
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              onChange={(e) => setImgLogo(e.target.files[0])}
+                              type="file"
+                              id="logo"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Nombre de la empresa
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              onChange={(e) => setNameCompany(e.target.value)}
+                              value={nameCompany}
+                              type="text"
+                              id="name"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              NIT
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="text"
+                              onChange={(e) => setNitCompany(e.target.value)}
+                              value={nitCompany}
+                              id="nit"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Direccion
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="text"
+                              onChange={(e) => setDireccionCompany(e.target.value)}
+                              value={direccionCompany}
+                              id="direccion"
+                            />
+                          </div>
+                        </div>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button onClick={createCompany}>Registrar empresa</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>}
+                  <br></br>
+                  <br></br>
+                  {usuario?.micompany !== null && <><Dialog>
+                    <DialogTrigger asChild>
+                      <Button>Crear usuario</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Ingresa los datos</DialogTitle>
+                        <DialogDescription
+                          className={"font-[OpenSans] text-sm mb-6"}
+                        >
+                          Ingresa los datos del usuario para generar la tarjeta
+                          digital
+                        </DialogDescription>
+                        <div className="flex flex-col pt-3 gap-4">
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Nombres
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              onChange={(e) => setName(e.target.value)}
+                              value={name}
+                              type="text"
+                              id="name"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Apellidos
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="text"
+                              onChange={(e) => setLastname(e.target.value)}
+                              value={lastname}
+                              id="lastname"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Teléfono
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="number"
+                              onChange={(e) => setPhone(e.target.value)}
+                              value={phone}
+                              id="phone"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Correo electrónico
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="email"
+                              onChange={(e) => setEmail(e.target.value)}
+                              value={email}
+                              id="email"
+                            />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label htmlFor="email">
+                              Contraseña
+                            </Label>
+                            <Input
+                              className={"font-[OpenSans] text-sm"}
+                              type="password"
+                              onChange={(e) => setPassword(e.target.value)}
+                              value={password}
+                              id="password"
+                            />
+                          </div>
+                        </div>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button onClick={createByUser}>Crear usuario</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   <h3 className="font-bold mt-8 mb-3">
                     Cargar usuarios de forma masiva
                   </h3>
                   <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Input onChange={(e) => setFile(e.target.files[0])} id="picture" type="file" />
+                    <Input
+                      onChange={(e) => setFile(e.target.files[0])}
+                      id="picture"
+                      type="file"
+                    />
                     <Button onClick={createMasiveUsers}>Subir</Button>
-                  </div>
+                  </div></>}
                 </>
               )}
             </CardContent>

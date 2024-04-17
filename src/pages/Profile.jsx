@@ -15,6 +15,7 @@ import {
   Settings,
   User,
   ChevronLeft,
+  Building2
 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import Perfil from "./Profile/Perfil";
@@ -43,6 +44,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import axios from "axios";
+import Empresa from "./Profile/Empresa";
 
 const Profile = () => {
   const { usuario } = useContext(UserContext);
@@ -158,6 +160,35 @@ const Profile = () => {
                 ))}
               {sizePanel > 14 && "Perfil"}
             </Button>
+            {usuario.micompany !== null && <Button
+              onClick={() => setPage(5)}
+              className={`font-[OpenSans] bg-transparent mb-2 justify-start text-black w-full border-2 border-transparent hover:bg-green-200 ${
+                page == 5 ? "bg-green-200" : "bg-transparent"
+              }`}
+            >
+              {(sizePanel > 18 || sizePanel < 14) &&
+                (sizePanel < 14 ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="w-full">
+                        <FileCode
+                          className={`${
+                            sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"
+                          }`}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>Empresa</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  <Building2
+                    className={`${sizePanel < 14 ? "m-auto" : "mr-4 h-4 w-4"}`}
+                  />
+                ))}
+              {sizePanel > 14 && "Empresa"}
+            </Button>}
             <Button
               onClick={() => setPage(2)}
               className={`font-[OpenSans] bg-transparent mb-2 justify-start text-black w-full border-2 border-transparent hover:bg-green-200 ${
@@ -328,6 +359,7 @@ const Profile = () => {
           {page == 2 && <Pagos />}
           {page == 3 && <Servicios />}
           {page == 4 && <Documentacion />}
+          {page == 5 && <Empresa />}
           {/* {page == 5 && <Soporte />} */}
           {/* {page == 6 && <Ajustes />} */}
         </ResizablePanel>
