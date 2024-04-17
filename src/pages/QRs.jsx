@@ -51,7 +51,7 @@ const QRs = () => {
       ) : usuario ? (
         (usuario.image && usuario.certificacion && usuario.documento) ? <div className="border-2 h-[580px] w-80 rounded-lg bg-white m-auto mt-16 p-6">
           <img
-            src={usuario.company.logo ? `https://teldip.com/uploads/${usuario.company.logo}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
+            src={usuario.company.logo ? `https://back-teldip.onrender.com/uploads/${usuario.company.logo}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}
             className="h-10 my-4 m-auto"
           ></img>
           <img

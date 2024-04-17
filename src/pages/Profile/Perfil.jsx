@@ -121,7 +121,7 @@ const Perfil = ({ className, ...props }) => {
       const form = new FormData();
       form.append("file", image);
       axios
-        .post("https://back-teldip.onrender.com/file/image/upload", form)
+        .post("/file/image/upload", form)
         .then(({ data }) => {
           axios
             .put("/user", { id: usuario.id, documento, certificacion, image:data.split("/")[1] })
