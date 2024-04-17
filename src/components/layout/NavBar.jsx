@@ -175,7 +175,7 @@ export default () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar role="button">
-                <AvatarImage className="bg-white" src={`https://back-teldip.onrender.com/uploads/${usuario.image}`} />
+                <AvatarImage className="bg-white" src={usuario.image ? `https://back-teldip.onrender.com/uploads/${usuario.image}` : "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
