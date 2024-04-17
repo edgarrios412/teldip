@@ -127,7 +127,7 @@ const Servicios = () => {
     const form = new FormData()
     form.append("file",imgLogo)
     axios.post("/file/image/upload",form).then(({data}) => {
-      axios.post("/company", {logo:data.split("\\")[1] ,direccion: direccionCompany, nit: nitCompany, nombre:nameCompany, owner: usuario.id})
+      axios.post("/company", {logo:data.split("/")[1] ,direccion: direccionCompany, nit: nitCompany, nombre:nameCompany, owner: usuario.id})
       .then(() => {toast({
         title:"Empresa registrada exitosamente",
       });
