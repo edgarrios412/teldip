@@ -46,7 +46,7 @@ const Empresa = () => {
             </p>
           </div>
         </div>
-        <h2 className="mt-8 mb-2 font-bold text-lg">Registrada por</h2>
+        {/* <h2 className="mt-8 mb-2 font-bold text-lg">Registrada por</h2>
         <Card className="w-fit h-fit p-4">
             <div className="flex gap-3">
                 <img className="w-16 h-16 rounded-full" src={owner?.image ? `https://back-teldip.onrender.com/uploads/${owner?.image}`: "https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png"}/>
@@ -56,7 +56,7 @@ const Empresa = () => {
                 <h2 className="text-gray-500 text-sm">{owner?.phone}</h2>
                 </div>
             </div>
-        </Card>
+        </Card> */}
         <h2 className="mt-8 mb-2 font-bold text-lg">Miembros registrados</h2>
         <div className="grid grid-cols-2 gap-5">
         {company?.users?.map(u => <a target="_blank" href={"https://teldip.com/qr/"+u.serial}><Card className="w-fit h-fit min-w-80 p-4">
