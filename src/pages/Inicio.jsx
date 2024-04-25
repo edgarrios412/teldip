@@ -1,10 +1,11 @@
 import Footer from "../components/layout/Footer"
 import style from "./Inicio.module.css"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import certificado from "../assets/certificado.svg"
+import certificado from "../assets/certificado.png"
 import biometricos from "../assets/biometricos.svg"
-import firma from "../assets/firma.svg"
-import tarjeta from "../assets/tarjeta.svg"
+import firma from "../assets/firma.png"
+import seguridad from "../assets/seguridad.png"
+import tarjeta from "../assets/tarjeta.jpeg"
 import software from "../assets/software.svg"
 import code from "../assets/code.svg"
 import apis from "../assets/apis.svg"
@@ -56,7 +57,7 @@ const Inicio = () => {
                     return prev + 1
                 }
             });
-        }, 8000)
+        }, 5000)
     }
 
     useEffect(() => {
@@ -80,9 +81,11 @@ const Inicio = () => {
     return (
         <>
             <div style={{ height: "fit-content" }}>
-                <div className="flex flex-col-reverse p-6 items-center lg:flex-row lg:my-32 lg:justify-center text-center m-auto lg:flex gap-10">
+            <div
+                    className="py-0 px-36 max-sm:px-10 max-sm:py-24 w-full h-[fit]">
+                        <div className="flex flex-col-reverse p-6 items-center lg:flex-row lg:my-10 lg:justify-center text-center m-auto lg:flex gap-10">
                     <motion.div
-                        className="max-w-[700px]"
+                        className="max-w-full"
                         initial={{ opacity: 0, x: 75 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.35, delay: 0 }}
@@ -96,24 +99,68 @@ const Inicio = () => {
                                 className="font-bold text-[40px] leading-[45px] lg:text-[56px] text-slate-800 lg:leading-[55px]">{textos[index]}<br></br>
                                 {/* <br></br> */}
                             </motion.p>
-                        <motion.p 
-                        key={index+10}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1 }}
-                        className="font-medium text-[17px] lg:text-xl font-[OpenSans] text-slate-500 mt-5">{subtitulos[index]}</motion.p>
-                        <Link to="/contacto">
+                        {/* <Link to="/contacto">
                         <button
                             className="font-medium text-lg mt-10 text-white p-3 rounded-lg bg-[#20af66]">Ponte en contacto con nosotros</button>
-                        </Link>
+                        </Link> */}
                     </motion.div>
                     {/* <Lottie lottieRef={lottieRef} animationData={animation} loop={true} /> */}
-                    <motion.img
+                    {/* <motion.img
                         initial={{ opacity: 1}}
                         animate={floatAnimation}
                         transition={{ duration: 2, delay: 2 }}
                         src={"https://desarrollodesoftware.com.co/storage-desarrollo/recorte-isotipo222.jpg"} className="max-h-96" />
+                         */}
+                </div>
+                    <div
+                        ref={ref}
+                        className="flex flex-wrap m-auto justify-around -mx-2 lg:gap-14 lg:mt-20 mt-20 gap-0">
+                        <motion.div
+                    
+                            ref={ref} className="rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[202px] p-10">
+                            <img src={certificado} className="h-60 m-auto -translate-y-20 rounded-xl" />
+                            <div className="-mt-16">
+                                <h3 className="font-semibold text-lg text-center mt-4">Desarrollo de Software</h3>
+                                {/* <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Asegura la integridad, validación y seguridad de tus documentos médicos con tecnología de vanguardia, garantizando la autenticidad y confiabilidad en el ámbito médico.</h5> */}
+                                <Link to="/contacto">
+                                {/* <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button> */}
+                                </Link>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            
+                            ref={ref} className="rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[202px] p-10">
+                            <img src={tarjeta} className="h-60 m-auto -translate-y-16" />
+                            <div className="-mt-16">
+                                <h3 className="font-semibold text-lg text-center mt-4">Tarjeta digital</h3>
+                                {/* <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Documento virtual seguro y fácil de usar para autenticación y verificación, proporcionando una solución eficiente y confiable para la identificación en el mundo digital.</h5> */}
+                                <Link to="/contacto">
+                                {/* <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button> */}
+                                </Link>                            </div>
+                        </motion.div>
+                        <motion.div
+                           
+                            ref={ref} className="rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[202px] p-10">
+                            <img src={seguridad} className="h-60 m-auto -translate-y-16 rounded-xl" />
+                            <div className="-mt-16">
+                                <h3 className="font-semibold text-lg text-center mt-4">Inteligencia artificial el futuro de la seguridad</h3>
+                                {/* <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Tecnología de seguridad avanzada para identificar y autenticar de manera única, ofreciendo un nivel de seguridad sin precedentes y personalización en la autenticación.</h5> */}
+                                <Link to="/contacto">
+                                {/* <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button> */}
+                                </Link>                            </div>
+                        </motion.div>
+                        <motion.div
+                           
+                            ref={ref} className="rounded-3xl w-1/3 lg:w-1/5 max-lg:w-full mb-52 px-2 h-[202px] p-10">
+                            <img src={firma} className="h-60 m-auto -translate-y-20 rounded-xl" />
+                            <div className="-mt-16">
+                                <h3 className="font-semibold text-lg text-center mt-4">Certificado y firma digital</h3>
+                                {/* <h5 className="text-sm font-[OpenSans] text-gray-500 max-w-96 h-28">Validación electrónica de documentos con seguridad y autenticidad, asegurando la integridad y confiabilidad de las firmas en el ámbito digital.</h5> */}
+                                <Link to="/contacto">
+                                {/* <button className="text-black text-base mt-4 rounded-lg border-black border-2 p-3 hover:bg-gray-800 hover:text-white transition-all">Más información</button> */}
+                                </Link>                            </div>
+                        </motion.div>
+                    </div>
                 </div>
                 <div className="flex mt-56 flex-col items-center lg:flex-row justify-center gap-16 z-30">
                     <motion.div
@@ -169,7 +216,7 @@ const Inicio = () => {
                     ref={barRef} className={style.barraDiagonal2}>
 
                 </motion.div> */}
-                <h1 className="font-bold text-4xl text-slate-800 text-center mt-20">Nuestros servicios</h1>
+                {/* <h1 className="font-bold text-4xl text-slate-800 text-center mt-20">Nuestros servicios</h1>
                 <div
                     className="py-36 px-36 max-sm:px-10 max-sm:py-24 w-full h-[fit]">
                     <motion.div
@@ -257,7 +304,7 @@ const Inicio = () => {
                                 </Link>                            </div>
                         </motion.div>
                     </motion.div>
-                </div>
+                </div> */}
                 {/* <AspectRatio ratio={16 / 9} className="bg-muted">
                     <img
                         src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
